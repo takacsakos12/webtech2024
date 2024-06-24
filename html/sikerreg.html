@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sikeres Regisztráció</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        function countdown() {
+            let counter = 5;
+            const interval = setInterval(() => {
+                document.getElementById('countdown').innerText = counter;
+                counter--;
+                if (counter < 0) {
+                    clearInterval(interval);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+        }
+        window.onload = countdown;
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Magyar Fight Shop</h1>
+        </div>
+    </header>
+    <main>
+        <div class="success-container">
+            <h2>Sikeres regisztráció!</h2>
+            <p>Ön 5 másodperc múlva vissza lesz irányítva a bejelentkezéshez. Visszaszámlálás: <span id="countdown">5</span></p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Magyar Fight Shop</p>
+    </footer>
+</body>
+</html>
