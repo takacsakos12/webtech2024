@@ -5,7 +5,6 @@ const itemSchema = new mongoose.Schema({
     gyarto: String,
     kategoria: String,
     ar: Number,
-    raktarkeszlet: Number,
     leiras: String,
     img: String
 });
