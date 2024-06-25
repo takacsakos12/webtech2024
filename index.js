@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const users = require('./middleware/api/users');
 const items = require('./middleware/api/items');
-const cart = require('./middleware/api/carts');
+const cart = require('./middleware/api/carts'); // Add cart middleware
 
 let db;
 const mongourl = "mongodb://localhost:27017/store";
@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger);
 app.use('/api/users', users);
 app.use('/api/items', items);
-app.use('/api/carts', cart); // Use cart middleware
+app.use('/api/cart', cart); // Use cart middleware
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;

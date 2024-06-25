@@ -45,17 +45,35 @@
 </head>
 <body>
     <header>
-        <h1>Your Cart</h1>
+        <h1>Kosár</h1>
     </header>
     <main>
         <div class="cart-container">
-            <h2>Items in Your Cart</h2>
+            <h2>Termékek a kosárban</h2>
             <div id="cart-items"></div>
-            <p>Total: <span id="total-cost">0 HUF</span></p>
+            <p>Összesen: <span id="total-cost">0 HUF</span></p>
+        </div>
+        <div class="order-form-container">
+            <h2>Rendelési adatok</h2>
+            <form id="order-form">
+                <label for="name">Név:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="address">Szállítási cím:</label>
+                <input type="text" id="address" name="address" required>
+                
+                <label for="payment-method">Fizetési mód:</label>
+                <select id="payment-method" name="payment-method" required>
+                    <option value="cash_on_delivery">Utánvét</option>
+                    <option value="prepayment">Elővétel</option>
+                </select>
+                
+                <button type="submit">Rendelés leadása</button>
+            </form>
         </div>
     </main>
     <footer>
-        <p>&copy; Your Shop</p>
+        <p>&copy; Magyar Fight Shop</p>
     </footer>
 </body>
 </html>
