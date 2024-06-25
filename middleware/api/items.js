@@ -1,25 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const Item = require('../../models/item');  // Ensure this path is correct
+const MongoClient = require('mongodb').MongoClient;
 
-// Get all items
-router.get('/', async (req, res) => {
-    try {
-        const items = await Item.find();
-        res.json(items);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+const url = 'mongodb://localhost:27017';
+const dbName = 'store';
+
+let db;
+
+MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
+    if (err) return console.error(err);
+    db = client.db(dbName);
 });
 
-// Update an item
-router.put('/:id', async (req, res) => {
-    try {
-        const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(item);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+router.get('/', (req, res) => {
+    db.collection('items').find().toArray((err, results) => {
+        if (err) return console.error(err);
+        res.json(results);
+    });
 });
 
 module.exports = router;

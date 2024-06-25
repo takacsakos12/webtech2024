@@ -10,7 +10,7 @@ const items = [
         "ar": 24990,
         "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű edző kesztyű box és fitnesz edzésekhez.",
-        "img": "https://example.com/everlast-gloves.jpg"
+        "img": "https://www.insportline.cz/upload/product/640x640/everlast-pro-style-elite-2312-2314.jpg.webp"
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ const items = [
         "ar": 13990,
         "raktarkeszlet": 20,
         "leiras": "Tartós Muay Thai nadrág, amely kiváló rugalmasságot és kényelmet biztosít.",
-        "img": "https://example.com/fairtex-shorts.jpg"
+        "img": "https://www.muaythaistores.eu/custom/twinsglovesshop/image/cache/w600h600wt1/product/fairtex/IMG_7337.webp?lastmod=1714813164.1670886106"
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const items = [
         "ar": 29990,
         "raktarkeszlet": 15,
         "leiras": "Hivatalos verseny Judo Gi megerősített varrással.",
-        "img": "https://example.com/adidas-judo-gi.jpg"
+        "img": "https://www.roninwear.com/images/adidas-judogi-club-j350-white-1.jpg"
     },
     {
         id: 4,
@@ -40,7 +40,7 @@ const items = [
         "ar": 7990,
         "raktarkeszlet": 50,
         "leiras": "Kiváló minőségű Karate öv, különböző színekben elérhető.",
-        "img": "https://example.com/shureido-belt.jpg"
+        "img": "https://www.szafarisport.hu/images/units/11577-01.jpg"
     },
     {
         id: 5,
@@ -50,7 +50,7 @@ const items = [
         "ar": 19990,
         "raktarkeszlet": 25,
         "leiras": "Tartós MMA kesztyű, ideális edzésekhez és versenyekhez.",
-        "img": "https://example.com/venum-gloves.jpg"
+        "img": "https://s13emagst.akamaized.net/products/45400/45399007/images/res_80d25307d0522c52c68b54fddd9271a7.jpg"
     },
     {
         id: 6,
@@ -60,7 +60,7 @@ const items = [
         "ar": 17990,
         "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű Taekwondo ruházat minden szintű gyakorló számára.",
-        "img": "https://example.com/daedo-uniform.jpg"
+        "img": "https://www.roninwear.com/images/daedo-ta1047-fetkd-taekwondo-dobok-white-1.jpg"
     },
     {
         id: 7,
@@ -70,7 +70,7 @@ const items = [
         "ar": 14990,
         "raktarkeszlet": 10,
         "leiras": "Védő fejvédő box edzésekhez és sparringhoz.",
-        "img": "https://example.com/ringside-headgear.jpg"
+        "img": "https://img.gorillasports.hu/p/49/77655/1618468312-43110-big.jpg"
     },
     {
         id: 8,
@@ -80,7 +80,7 @@ const items = [
         "ar": 29990,
         "raktarkeszlet": 20,
         "leiras": "Professzionális edző kesztyű komoly boxolók számára.",
-        "img": "https://example.com/cleto-reyes-gloves.jpg"
+        "img": "https://senteso-cz.s11.cdn-upgates.com/_cache/a/5/a5b2cf0d0e105f6f87dd221aae08cd85-cleto-reyes-velcro-training-gloves-gold-1.jpg"
     },
     {
         id: 9,
@@ -90,7 +90,7 @@ const items = [
         "ar": 15990,
         "raktarkeszlet": 25,
         "leiras": "Prémium Muay Thai nadrág kiváló kényelemmel és tartóssággal.",
-        "img": "https://example.com/top-king-shorts.jpg"
+        "img": "https://www.muaythaitop.com/image/cache/data/CLS-015-Black-Blue-600x450.jpg"
     },
     {
         id: 10,
@@ -100,7 +100,7 @@ const items = [
         "ar": 27990,
         "raktarkeszlet": 10,
         "leiras": "Kiváló minőségű Judo Gi, alkalmas versenyekre és edzésekre.",
-        "img": "https://example.com/mizuno-judo-gi.jpg"
+        "img": "https://judogi-shop.hu/img/91037/22EA8A0101_1-0/585x585,r/22EA8A0101_1-0.jpg?time=1660129334"
     },
     {
         id: 11,
@@ -110,7 +110,7 @@ const items = [
         "ar": 6990,
         "raktarkeszlet": 40,
         "leiras": "Tartós Karate öv edzésekhez és versenyekhez.",
-        "img": "https://example.com/hayabusa-belt.jpg"
+        "img": "https://www.shogunfight.eu/fotky4209/fotos/_vyrn_2497pro-jiu-jitsu-belt-brown-main.jpg"
     },
     {
         id: 12,
@@ -120,7 +120,7 @@ const items = [
         "ar": 16990,
         "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű MMA kesztyű edzésekhez és profi küzdelmekhez.",
-        "img": "https://example.com/rdx-gloves.jpg"
+        "img": "https://respectfight.hu/custom/vitalbox/image/cache/w460h460wt1/RDX/mma_kesztyu/grappling_mma_gloves_blue_rdx.png.webp?lastmod=1717935006.1714139737"
     },
     {
         id: 13,
@@ -130,7 +130,7 @@ const items = [
         "ar": 18990,
         "raktarkeszlet": 20,
         "leiras": "Tartós és kényelmes Taekwondo ruházat minden szinten.",
-        "img": "https://example.com/kwon-uniform.jpg"
+        "img": "https://kwon.hu/wp-content/uploads/2019/11/1006_01_003_16-P.jpg"
     },
     {
         id: 14,
@@ -140,7 +140,7 @@ const items = [
         "ar": 15990,
         "raktarkeszlet": 15,
         "leiras": "Kiváló minőségű fejvédő box edzésekhez és sparringhoz.",
-        "img": "https://example.com/title-headgear.jpg"
+        "img": "https://webshop.legea.hu/img/10144/PLTMGP/PLTMGP.jpg"
     }
 ];
 
