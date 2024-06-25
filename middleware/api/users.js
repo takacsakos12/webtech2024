@@ -26,6 +26,7 @@ router.post('/register', (req, res) => {
         password: req.body.password,
         email: req.body.email,
         birth: req.body.birth,
+        money: 500000,
         id: uuidv4(),
         cart: []
     };

@@ -19,15 +19,14 @@
                             <h3>${item.termek_nev}</h3>
                             <p>${item.leiras}</p>
                             <p>${item.ar} HUF</p>
-                            <button onclick="addToCart('${item._id}', '${item.termek_nev}')">Kosárba</button>
+                            <button onclick="addToCart('${item._id}')">Kosárba</button>
                         `;
                         container.appendChild(itemElement);
                     });
                 });
-            updateCart();
         });
 
-        function addToCart(itemId, itemName) {
+        function addToCart(itemId) {
             fetch('/api/basket/add', {
                 method: 'POST',
                 headers: {
@@ -35,40 +34,30 @@
                 },
                 body: JSON.stringify({ itemId })
             })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text) });
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                alert(`Hozzáadva a kosárhoz: ${itemName}`);
+                alert(`Hozzáadva a kosárhoz: ${data.item.termek_nev}`);
                 updateCart();
-            })
-            .catch(error => {
-                alert(`Error: ${error.message}`);
             });
         }
 
         function updateCart() {
             fetch('/api/basket')
                 .then(response => response.json())
-                .then(data => {
+                .then(items => {
                     const cartContainer = document.getElementById('cart-items');
                     cartContainer.innerHTML = '';
-                    data.items.forEach(item => {
+                    let totalCost = 0;
+                    items.forEach(item => {
+                        totalCost += item.ar;
                         const itemElement = document.createElement('div');
                         itemElement.className = 'cart-item';
                         itemElement.innerHTML = `
-                            <img src="${item.img}" alt="${item.termek_nev}" width="50">
                             <p>${item.termek_nev} - ${item.ar} HUF</p>
                         `;
                         cartContainer.appendChild(itemElement);
                     });
-                    document.getElementById('total-cost').innerText = data.totalCost + ' HUF';
-                })
-                .catch(error => {
-                    console.error('Error fetching cart items:', error);
+                    document.getElementById('total-cost').innerText = totalCost + ' HUF';
                 });
         }
     </script>
@@ -96,9 +85,9 @@
     <div id="cart-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="document.getElementById('cart-modal').style.display='none'">&times;</span>
-            <h2>Kosár</h2>
+            <h2>Cart</h2>
             <div id="cart-items"></div>
-            <p>Összesen: <span id="total-cost">0 HUF</span></p>
+            <p>Total: <span id="total-cost">0 HUF</span></p>
         </div>
     </div>
 </body>
