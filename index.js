@@ -4,17 +4,16 @@ const path = require('path');
 const port = process.env.PORT || 8080;
 const logger = require('./middleware/logger');
 const MongoClient = require("mongodb").MongoClient;
-var users = require('./middleware/api/users');
-var items = require('./middleware/api/items');
-var db;
-var mongourl = "mongodb://localhost:27017/store";
-var cookieParser = require('cookie-parser');
-var expressSession = require('express-session');
+const users = require('./middleware/api/users');
+const items = require('./middleware/api/items');
+const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
 const bodyParser = require('body-parser');
 const uuid = require("uuid");
 
-/* Login */
-var loggedUser = false;
+const mongourl = "mongodb://localhost:27017/store";
+let db;
+
 MongoClient.connect(mongourl, { useUnifiedTopology: true }, (err, client) => {
     if (err) return console.log(err);
     db = client.db("store");
@@ -35,6 +34,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(logger);
+
 app.use("/api/users", users);
 app.use("/api/items", items);
 
@@ -54,7 +54,7 @@ app.post('/login', (req, res) => {
     db.collection("users").findOne(req.body, (err, user) => {
         if (err) throw err;
         if (!user) {
-            res.redirect("/hiba.html");
+            res.redirect("/error.html");
         } else {
             req.session.uid = user.id;
             res.redirect('/webshop.html');
