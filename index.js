@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const users = require('./middleware/api/users');
 const items = require('./middleware/api/items');
-const basket = require('./middleware/api/basket');
+const cart = require('./middleware/api/carts');
 
 let db;
 const mongourl = "mongodb://localhost:27017/store";
@@ -18,6 +18,7 @@ const mongourl = "mongodb://localhost:27017/store";
 MongoClient.connect(mongourl, { useUnifiedTopology: true }, (err, client) => {
     if (err) return console.log(err);
     db = client.db("store");
+    app.locals.db = db; // Store the db connection in app.locals
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
     });
@@ -37,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger);
 app.use('/api/users', users);
 app.use('/api/items', items);
-app.use('/api/basket', basket);
+app.use('/api/carts', cart); // Use cart middleware
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -58,7 +59,6 @@ app.post('/register', (req, res) => {
         password: req.body.password,
         email: req.body.email,
         birth: req.body.birth,
-        money: 500000,
         id: uuid.v4(),
         cart: []
     };
@@ -93,6 +93,14 @@ app.get('/webshop.html', (req, res) => {
         res.redirect('/');
     } else {
         res.sendFile(path.join(__dirname, 'public', 'webshop.html'));
+    }
+});
+
+app.get('/cart.html', (req, res) => {
+    if (!req.session.uid) {
+        res.redirect('/');
+    } else {
+        res.sendFile(path.join(__dirname, 'public', 'cart.html'));
     }
 });
 

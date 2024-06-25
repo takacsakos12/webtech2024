@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCart();
+
+            function updateCart() {
+                fetch('/api/cart/USER_ID')
+                    .then(response => response.json())
+                    .then(items => {
+                        const cartContainer = document.getElementById('cart-items');
+                        cartContainer.innerHTML = '';
+                        let totalCost = 0;
+                        items.forEach(item => {
+                            totalCost += item.ar;
+                            const itemElement = document.createElement('div');
+                            itemElement.className = 'cart-item';
+                            itemElement.innerHTML = `
+                                <p>${item.termek_nev} - ${item.ar} HUF</p>
+                                <button onclick="removeFromCart('${item._id}')">Eltávolítás</button>
+                            `;
+                            cartContainer.appendChild(itemElement);
+                        });
+                        document.getElementById('total-cost').innerText = totalCost + ' HUF';
+                    });
+            }
+
+            window.removeFromCart = function(cartItemId) {
+                fetch(`/api/cart/remove/${cartItemId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    updateCart();
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Your Cart</h1>
+    </header>
+    <main>
+        <div class="cart-container">
+            <h2>Items in Your Cart</h2>
+            <div id="cart-items"></div>
+            <p>Total: <span id="total-cost">0 HUF</span></p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Your Shop</p>
+    </footer>
+</body>
+</html>
