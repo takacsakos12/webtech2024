@@ -9,22 +9,22 @@
 <body>
     <header>
         <div class="container">
-            <h1>Regisztráció</h1>
+            <h1>Magyar Fight Shop</h1>
         </div>
     </header>
     <main>
         <div class="form-container">
-            <div class="form-box">
+            <div class="form-box" id="register-form">
                 <h2>Regisztráció</h2>
-                <form action="/register" method="POST">
-                    <label for="username">Felhasználónév:</label>
-                    <input type="text" id="username" name="username" required>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                    <label for="password">Jelszó:</label>
-                    <input type="password" id="password" name="password" required>
-                    <label for="birth">Születési dátum:</label>
-                    <input type="date" id="birth" name="birth" required>
+                <form action="/register" method="post">
+                    <label for="register-username">Felhasználónév:</label>
+                    <input type="text" id="register-username" name="username" required>
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" name="email" required>
+                    <label for="register-password">Jelszó:</label>
+                    <input type="password" id="register-password" name="password" required>
+                    <label for="register-birthdate">Születési dátum:</label>
+                    <input type="date" id="register-birthdate" name="birthdate" required>
                     <button type="submit">Regisztráció</button>
                 </form>
             </div>

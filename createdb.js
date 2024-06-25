@@ -8,7 +8,6 @@ const items = [
         "gyarto": "Everlast",
         "kategoria": "Box",
         "ar": 24990,
-        "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű edző kesztyű box és fitnesz edzésekhez.",
         "img": "https://www.insportline.cz/upload/product/640x640/everlast-pro-style-elite-2312-2314.jpg.webp"
     },
@@ -18,7 +17,6 @@ const items = [
         "gyarto": "Fairtex",
         "kategoria": "Muay Thai",
         "ar": 13990,
-        "raktarkeszlet": 20,
         "leiras": "Tartós Muay Thai nadrág, amely kiváló rugalmasságot és kényelmet biztosít.",
         "img": "https://www.muaythaistores.eu/custom/twinsglovesshop/image/cache/w600h600wt1/product/fairtex/IMG_7337.webp?lastmod=1714813164.1670886106"
     },
@@ -28,7 +26,6 @@ const items = [
         "gyarto": "Adidas",
         "kategoria": "Judo",
         "ar": 29990,
-        "raktarkeszlet": 15,
         "leiras": "Hivatalos verseny Judo Gi megerősített varrással.",
         "img": "https://www.roninwear.com/images/adidas-judogi-club-j350-white-1.jpg"
     },
@@ -38,7 +35,6 @@ const items = [
         "gyarto": "Shureido",
         "kategoria": "Karate",
         "ar": 7990,
-        "raktarkeszlet": 50,
         "leiras": "Kiváló minőségű Karate öv, különböző színekben elérhető.",
         "img": "https://www.szafarisport.hu/images/units/11577-01.jpg"
     },
@@ -48,7 +44,6 @@ const items = [
         "gyarto": "Venum",
         "kategoria": "MMA",
         "ar": 19990,
-        "raktarkeszlet": 25,
         "leiras": "Tartós MMA kesztyű, ideális edzésekhez és versenyekhez.",
         "img": "https://s13emagst.akamaized.net/products/45400/45399007/images/res_80d25307d0522c52c68b54fddd9271a7.jpg"
     },
@@ -58,7 +53,6 @@ const items = [
         "gyarto": "Daedo",
         "kategoria": "Taekwondo",
         "ar": 17990,
-        "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű Taekwondo ruházat minden szintű gyakorló számára.",
         "img": "https://www.roninwear.com/images/daedo-ta1047-fetkd-taekwondo-dobok-white-1.jpg"
     },
@@ -68,7 +62,6 @@ const items = [
         "gyarto": "Ringside",
         "kategoria": "Box",
         "ar": 14990,
-        "raktarkeszlet": 10,
         "leiras": "Védő fejvédő box edzésekhez és sparringhoz.",
         "img": "https://img.gorillasports.hu/p/49/77655/1618468312-43110-big.jpg"
     },
@@ -78,7 +71,6 @@ const items = [
         "gyarto": "Cleto Reyes",
         "kategoria": "Box",
         "ar": 29990,
-        "raktarkeszlet": 20,
         "leiras": "Professzionális edző kesztyű komoly boxolók számára.",
         "img": "https://senteso-cz.s11.cdn-upgates.com/_cache/a/5/a5b2cf0d0e105f6f87dd221aae08cd85-cleto-reyes-velcro-training-gloves-gold-1.jpg"
     },
@@ -88,7 +80,6 @@ const items = [
         "gyarto": "Top King",
         "kategoria": "Muay Thai",
         "ar": 15990,
-        "raktarkeszlet": 25,
         "leiras": "Prémium Muay Thai nadrág kiváló kényelemmel és tartóssággal.",
         "img": "https://www.muaythaitop.com/image/cache/data/CLS-015-Black-Blue-600x450.jpg"
     },
@@ -98,7 +89,6 @@ const items = [
         "gyarto": "Mizuno",
         "kategoria": "Judo",
         "ar": 27990,
-        "raktarkeszlet": 10,
         "leiras": "Kiváló minőségű Judo Gi, alkalmas versenyekre és edzésekre.",
         "img": "https://judogi-shop.hu/img/91037/22EA8A0101_1-0/585x585,r/22EA8A0101_1-0.jpg?time=1660129334"
     },
@@ -108,7 +98,6 @@ const items = [
         "gyarto": "Hayabusa",
         "kategoria": "Karate",
         "ar": 6990,
-        "raktarkeszlet": 40,
         "leiras": "Tartós Karate öv edzésekhez és versenyekhez.",
         "img": "https://www.shogunfight.eu/fotky4209/fotos/_vyrn_2497pro-jiu-jitsu-belt-brown-main.jpg"
     },
@@ -118,7 +107,6 @@ const items = [
         "gyarto": "RDX",
         "kategoria": "MMA",
         "ar": 16990,
-        "raktarkeszlet": 30,
         "leiras": "Kiváló minőségű MMA kesztyű edzésekhez és profi küzdelmekhez.",
         "img": "https://respectfight.hu/custom/vitalbox/image/cache/w460h460wt1/RDX/mma_kesztyu/grappling_mma_gloves_blue_rdx.png.webp?lastmod=1717935006.1714139737"
     },
@@ -128,7 +116,6 @@ const items = [
         "gyarto": "Kwon",
         "kategoria": "Taekwondo",
         "ar": 18990,
-        "raktarkeszlet": 20,
         "leiras": "Tartós és kényelmes Taekwondo ruházat minden szinten.",
         "img": "https://kwon.hu/wp-content/uploads/2019/11/1006_01_003_16-P.jpg"
     },
@@ -138,7 +125,6 @@ const items = [
         "gyarto": "Title",
         "kategoria": "Box",
         "ar": 15990,
-        "raktarkeszlet": 15,
         "leiras": "Kiváló minőségű fejvédő box edzésekhez és sparringhoz.",
         "img": "https://webshop.legea.hu/img/10144/PLTMGP/PLTMGP.jpg"
     }
