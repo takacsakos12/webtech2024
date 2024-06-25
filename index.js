@@ -51,10 +51,10 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    db.collection("users").findOne(req.body, (err, user) => {
+    db.collection("users").findOne({ username: req.body.username, password: req.body.password }, (err, user) => {
         if (err) throw err;
         if (!user) {
-            res.redirect("/error.html");
+            res.redirect("/hiba.html");
         } else {
             req.session.uid = user.id;
             res.redirect('/webshop.html');
@@ -63,14 +63,35 @@ app.post('/login', (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    req.body['money'] = 500000; 
-    req.body["id"] = uuid.v4();
-    req.body["cart"] = [];
-    db.collection("users").insertOne(req.body, (err, result) => {
+    const newUser = {
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        birth: req.body.birth,
+        money: 500000,
+        id: uuid.v4(),
+        cart: []
+    };
+
+    db.collection("users").findOne({ $or: [{ username: newUser.username }, { email: newUser.email }] }, (err, user) => {
         if (err) throw err;
-        console.log("User inserted");
-        res.redirect("/sikerreg.html");
+        if (user) {
+            res.redirect("/hiba.html");
+        } else {
+            db.collection("users").insertOne(newUser, (err, result) => {
+                if (err) throw err;
+                console.log("User inserted");
+                res.redirect("/sikerreg.html");
+            });
+        }
     });
+});
+
+app.get('/error.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'hiba.html'));
+    setTimeout(() => {
+        res.redirect('/');
+    }, 5000); // Redirect to index.html after 5 seconds
 });
 
 app.get('*', (req, res, next) => {
