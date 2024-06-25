@@ -1,45 +1,50 @@
 const express = require('express');
 const router = express.Router();
-const Item = require('../models/Item');
-const CartItem = require('../models/cart');
+const { ObjectId } = require('mongodb');  // Assuming you are using MongoDB
+const Item = require('../../models/item'); // Corrected path
+const CartItem = require('../../models/cart'); // Corrected path
 
-// Add item to cart
-router.post('/add', async (req, res) => {
+router.post('/add', (req, res) => {
     const { itemId, userId } = req.body;
-    try {
-        const item = await Item.findById(itemId);
+    const db = req.app.locals.db;
+
+    db.collection('items').findOne({ _id: ObjectId(itemId) }, (err, item) => {
+        if (err) return res.status(500).json({ message: 'Internal server error' });
         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-        const cartItem = new CartItem({ ...item._doc, userId });
-        await cartItem.save();
+        const cartItem = { ...item, userId };
+        db.collection('cart').insertOne(cartItem, (err, result) => {
+            if (err) return res.status(500).json({ message: 'Internal server error' });
 
-        await Item.findByIdAndDelete(itemId);
+            db.collection('items').deleteOne({ _id: ObjectId(itemId) }, (err) => {
+                if (err) return res.status(500).json({ message: 'Internal server error' });
 
-        res.status(201).json(cartItem);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+                res.status(201).json(cartItem);
+            });
+        });
+    });
 });
 
-// Get cart items for a user
-router.get('/:userId', async (req, res) => {
-    try {
-        const cartItems = await CartItem.find({ userId: req.params.userId });
-        res.json(cartItems);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.get('/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const db = req.app.locals.db;
+
+    db.collection('cart').find({ userId }).toArray((err, items) => {
+        if (err) return res.status(500).json({ message: 'Internal server error' });
+
+        res.json(items);
+    });
 });
 
-// Remove item from cart
-router.delete('/remove/:cartItemId', async (req, res) => {
-    try {
-        const cartItem = await CartItem.findByIdAndDelete(req.params.cartItemId);
-        if (!cartItem) return res.status(404).json({ message: 'Cart item not found' });
+router.delete('/remove/:cartItemId', (req, res) => {
+    const cartItemId = req.params.cartItemId;
+    const db = req.app.locals.db;
+
+    db.collection('cart').deleteOne({ _id: ObjectId(cartItemId) }, (err, result) => {
+        if (err) return res.status(500).json({ message: 'Internal server error' });
+
         res.json({ message: 'Item removed from cart' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    });
 });
 
 module.exports = router;
