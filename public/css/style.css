@@ -16,12 +16,25 @@ header {
     padding: 20px 0;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
-.container {
+.container, .index-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+.cart-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.cart-icon img {
+    width: 32px; /* Adjust the size as needed */
+    height: 32px; /* Adjust the size as needed */
 }
 
 main {
@@ -145,5 +158,68 @@ footer {
 }
 
 .button:hover {
+    background-color: #ff1a1a;
+}
+
+.form-container, .success-container, .error-container, .index-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    transition: transform 0.3s ease;
+    flex-direction: column;
+    text-align: center;
+}
+
+.form-box {
+    width: 100%;
+}
+
+.form-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #666;
+}
+
+form input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+form input:focus {
+    border-color: #ff4d4d;
+    outline: none;
+}
+
+form button, .index-container button, .main-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+form button:hover, .index-container button:hover, .main-button:hover {
     background-color: #ff1a1a;
 }
