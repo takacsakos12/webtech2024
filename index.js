@@ -43,11 +43,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    if (!req.session.uid) {
-        res.sendFile(path.join(__dirname, 'public', 'login.html'));
-    } else {
-        res.redirect('/webshop.html');
-    }
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 app.post('/login', (req, res) => {
