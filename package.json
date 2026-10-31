@@ -14,7 +14,6 @@
     "admin": "node scripts/create-admin.js",
     "test": "node --test test/*.test.js",
     "check": "node scripts/check.js",
-    "migrate:users": "node scripts/migrate-users.js",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

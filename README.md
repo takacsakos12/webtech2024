@@ -29,7 +29,7 @@ npm start
 
 Az alkalmazás a 8080-as porton indul. A `docker compose` csak a fejlesztői adatbázist indítja; a Node-alkalmazás a gazdagépen fut. Ha már fut MongoDB a 27017-es porton, használd azt, ne indíts második példányt ugyanarra a portra.
 
-A `seed` ismételten futtatható: 14 mintaterméket hoz létre, a meglévő termékeket nem írja felül, a kosarakat és felhasználókat nem törli. Nem hoz létre alapértelmezett fiókot vagy jelszót.
+A `seed` ismételten futtatható: 30 mintaterméket hoz létre, a meglévő termékeket nem írja felül, a kosarakat és felhasználókat nem törli. Nem hoz létre alapértelmezett fiókot vagy jelszót.
 
 ```sh
 npm run dev  # automatikus újraindítás szervermódosításkor
@@ -65,20 +65,9 @@ node --env-file=.env scripts/create-admin.js
 
 A parancs nem ír felül és nem emel jogosultságot meglévő fiókon. Bejelentkezett adminként a katalógus alján jelenik meg a termékfelviteli űrlap.
 
-### Frissítés a régi verzióról
+### Felhasználók
 
-Készíts adatbázis-mentést, állítsd le a régi alkalmazást, telepítsd a függőségeket, majd futtasd:
-
-```sh
-npm ci
-npm run migrate:users
-npm run seed
-npm start
-```
-
-A migráció a régi olvasható jelszavakat scrypt-hashre cseréli és eltávolítja a `password` mezőt. A régi kosarat `legacyCart` néven megőrzi, az új kosár üresen indul. A régi külön `cart` kollekciót nem módosítja. Az eredeti program által már törölt katalógustermékeket az új alkalmazás nem tudja automatikusan visszaállítani; a mintatermékek a `seed` paranccsal pótolhatók.
-
-A migráció normalizált név/e-mail ütközésnél módosítás előtt leáll. Az ütközéseket kézzel kell feloldani. A régi, 10 karakternél rövidebb jelszavakat is migrálja, az új regisztrációkra az erősebb követelmény vonatkozik. Meglévő felhasználó csak migráció után tud belépni. A migráció és a seed megismételhető.
+Az új verzió új regisztrációkra épít; régi felhasználók és kosarak migrációja nem része a projektnek. A program nem töröl meglévő adatbázist. Fejlesztéshez külön adatbázis használható a `MONGODB_URI` változóval.
 
 ## Ellenőrzés
 
@@ -87,7 +76,7 @@ Futó MongoDB szükséges; minden integrációs és böngészőteszt véletlen n
 ```sh
 npm run check         # JavaScript szintaxis
 npm run format:check  # egységes formázás
-npm test              # jelszavak, API, jogosultságok, kosár, rendelés, migráció
+npm test              # jelszavak, API, jogosultságok, kosár, rendelés
 npx playwright install chromium
 npm run test:e2e      # valódi böngésző, asztali és mobilméret
 npm audit
@@ -124,9 +113,9 @@ A korábbi nyilvános felhasználólista és tetszőleges felhasználóazonosít
 - `index.js`: adatbáziskapcsolat, munkamenettár, indítás, szabályos leállítás.
 - `lib/`: adatbázis és jelszókezelés.
 - `public/`: keretrendszer és CDN-szkriptek nélküli HTML/CSS/JavaScript felület.
-- `scripts/`: migráció, adminlétrehozás és szintaktikai ellenőrzés.
+- `scripts/`: adminlétrehozás és szintaktikai ellenőrzés.
 - `test/`: API-, jelszó- és böngészőtesztek.
 
 A kosár és a rendelések egy felhasználói dokumentumban vannak. A rendelés mentése és a kosár ürítése így egy atomi MongoDB-művelet, külön replika nélkül. A bemutató legfeljebb 100 különböző terméket enged a kosárban, termékenként 99 darabot, és 100 rendelést tárol felhasználónként. Nincs fizetés, tényleges készletfoglalás, szállításidíj-számítás, jelszó-visszaállítás, e-mail-hitelesítés vagy teljes adminisztrációs felület. A regisztráció nem kér szükségtelen születési dátumot.
 
-A termékképek eredeti külső hivatkozások; elérhetőségük és felhasználási jogaik külön ellenőrzést igényelnek. A helyettesítő kép helyben rendelkezésre áll. Éles üzlethez külön fizetési, készletkezelési, adatkezelési és üzemeltetési tervezés szükséges.
+A 30 mintatermék adatai a `data/products.json` fájlban vannak. Az új mintaadatokban a nem igazolt jogú kereskedői képcímeket eltávolítottuk; ellenőrzött fotók még nincsenek. A forrásellenőrzés és a régebbi adatbázisokra vonatkozó tudnivalók: [Termékfotók](docs/product-images.md). Éles üzlethez külön fizetési, készletkezelési, adatkezelési és üzemeltetési tervezés szükséges.

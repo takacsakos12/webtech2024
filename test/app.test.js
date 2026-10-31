@@ -324,47 +324,6 @@ test('malformed JSON and oversized requests return errors without leaking intern
   });
   assert.equal(r.status, 413);
 });
-test('legacy migration hashes existing passwords, preserves old carts and is repeatable', async () => {
-  const { execFile } = require('node:child_process');
-  const { promisify } = require('node:util');
-  const exec = promisify(execFile);
-  const legacy = await db.collection('users').insertOne({
-    username: 'Legacy',
-    email: 'legacy@example.invalid',
-    password: 'old',
-    cart: [{ id: 1 }],
-  });
-  const uri = new URL(
-    process.env.TEST_MONGODB_URI || 'mongodb://127.0.0.1:27017'
-  );
-  uri.pathname = '/' + db.databaseName;
-  await exec(process.execPath, ['scripts/migrate-users.js'], {
-    env: { ...process.env, MONGODB_URI: uri.toString() },
-  });
-  const migrated = await db
-    .collection('users')
-    .findOne({ _id: legacy.insertedId });
-  assert.equal(migrated.usernameKey, 'legacy');
-  assert.equal(migrated.password, undefined);
-  assert.match(migrated.passwordHash, /^scrypt:/);
-  assert.deepEqual(migrated.cart, []);
-  assert.deepEqual(migrated.legacyCart, [{ id: 1 }]);
-  const again = await exec(process.execPath, ['scripts/migrate-users.js'], {
-    env: { ...process.env, MONGODB_URI: uri.toString() },
-  });
-  assert.match(again.stdout, /Migrated 0 accounts/);
-  const b = browser();
-  await b.request('/api/session');
-  assert.equal(
-    (
-      await b.request('/login', {
-        method: 'POST',
-        body: { username: 'Legacy', password: 'old' },
-      })
-    ).status,
-    200
-  );
-});
 test('seed is idempotent and preserves local product edits', async () => {
   const { execFile } = require('node:child_process');
   const exec = require('node:util').promisify(execFile);
@@ -380,8 +339,10 @@ test('seed is idempotent and preserves local product edits', async () => {
   assert.equal(await db.collection('items').countDocuments(), count);
   assert.equal((await db.collection('items').findOne({ id: 1 })).ar, 12345);
   assert.equal(
-    await db.collection('items').countDocuments({ id: { $gte: 1, $lte: 14 } }),
-    14
+    await db
+      .collection('items')
+      .countDocuments({ id: { $gte: 1, $lte: items.length } }),
+    items.length
   );
 });
 test('repeated authentication attempts are rate limited', async () => {

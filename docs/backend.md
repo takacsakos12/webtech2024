@@ -13,7 +13,7 @@ npm run seed
 npm run start:api
 ```
 
-Ha már fut MongoDB a 27017-es porton, a Docker-indítást hagyd ki. Régi adatbázis esetén mentés után kövesd a README migrációs lépéseit.
+Ha már fut MongoDB a 27017-es porton, a Docker-indítást hagyd ki. Új regisztrációkat használunk; régi fiókokhoz nincs migráció. Meglévő adatbázist a program nem töröl.
 
 A `start:api` kizárólag a backendet indítja: nincs HTML-kiszolgálás vagy bejelentkezési oldalra átirányítás. Az ismeretlen útvonalak JSON 404-et adnak. A meglévő `npm start` kompatibilitásból továbbra is kiszolgálja a régi felületet. A `node --env-file=.env scripts/start-api.js` beolvassa a helyi konfigurációt is.
 

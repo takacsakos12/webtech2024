@@ -180,21 +180,9 @@ function createApp({
       throw fail(400, 'A jelszó 10–128 karakter hosszú legyen.');
     const usernameKey = username.trim().toLocaleLowerCase('hu');
     const emailKey = email.trim().toLowerCase();
-    // Legacy users have no normalized keys: prevent claiming their identities, too.
-    const escaped = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const existing = await db.collection('users').findOne({
-      $or: [
-        { usernameKey },
-        { emailKey },
-        {
-          username: {
-            $regex: `^${escaped(username.trim())}$`,
-            $options: 'i',
-          },
-        },
-        { email: { $regex: `^${escaped(email.trim())}$`, $options: 'i' } },
-      ],
-    });
+    const existing = await db
+      .collection('users')
+      .findOne({ $or: [{ usernameKey }, { emailKey }] });
     if (existing)
       throw fail(409, 'Ez a felhasználónév vagy e-mail-cím már foglalt.');
     const user = {

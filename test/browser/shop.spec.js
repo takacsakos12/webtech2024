@@ -52,12 +52,14 @@ test('register, filter, manage cart, order and log out on desktop and mobile', a
     .fill('browser-test-password');
   await page.getByRole('button', { name: 'Regisztráció' }).click();
   await expect(page).toHaveURL(base + '/webshop.html');
-  await expect(page.locator('.product-card')).toHaveCount(14);
+  await expect(page.locator('.product-card')).toHaveCount(items.length);
   await expect(page.locator('#admin-panel')).toBeHidden();
   await page
     .getByRole('combobox', { name: 'Sportág', exact: true })
     .selectOption('Box');
-  await expect(page.locator('.product-card')).toHaveCount(4);
+  await expect(page.locator('.product-card')).toHaveCount(
+    items.filter((item) => item.kategoria === 'Box').length
+  );
   await page.getByLabel('Mit keresel?').fill('Everlast');
   await expect(page.locator('.product-card')).toHaveCount(1);
   await expect(page.locator('.product-image img')).toHaveAttribute(
