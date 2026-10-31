@@ -22,7 +22,7 @@ Előfeltételek: **Node.js 22 vagy újabb**, npm, **MongoDB 7**. A CI Node.js 24
 
 ```sh
 npm ci
-docker compose up -d --wait
+docker compose -f backend/compose.yaml up -d --wait
 npm run seed
 npm start
 ```
@@ -37,10 +37,10 @@ npm run dev  # automatikus újraindítás szervermódosításkor
 
 ### Környezeti változók
 
-Másold a `.env.example` fájlt `.env` néven; ez Git által figyelmen kívül hagyott helyi fájl. A Node csak külön kapcsolóval olvassa be:
+Másold a `backend/.env.example` fájlt `backend/.env` néven; ez Git által figyelmen kívül hagyott helyi fájl. A Node csak külön kapcsolóval olvassa be:
 
 ```sh
-node --env-file=.env index.js
+node --env-file=backend/.env backend/index.js
 ```
 
 | Változó            | Alapérték / jelentés                                             |
@@ -57,10 +57,10 @@ A fejlesztői munkamenettitok minden indításkor véletlen, ezért szerverújra
 
 ### Adminisztrátor
 
-Új, külön adminfiókot hozhatsz létre az `ADMIN_USERNAME`, `ADMIN_EMAIL` és `ADMIN_PASSWORD` környezeti változókkal. A jelszó 10–128 karakter legyen. Ezeket biztonságos környezeti beállításon keresztül vagy a helyi, nem követett `.env` fájlban add meg, majd:
+Új, külön adminfiókot hozhatsz létre az `ADMIN_USERNAME`, `ADMIN_EMAIL` és `ADMIN_PASSWORD` környezeti változókkal. A jelszó 10–128 karakter legyen. Ezeket biztonságos környezeti beállításon keresztül vagy a helyi, nem követett `backend/.env` fájlban add meg, majd:
 
 ```sh
-node --env-file=.env scripts/create-admin.js
+node --env-file=backend/.env backend/scripts/create-admin.js
 ```
 
 A parancs nem ír felül és nem emel jogosultságot meglévő fiókon. Bejelentkezett adminként a katalógus alján jelenik meg a termékfelviteli űrlap.
@@ -107,17 +107,33 @@ Minden módosító kéréshez munkamenetsüti és `X-CSRF-Token` fejléc kell. A
 
 A korábbi nyilvános felhasználólista és tetszőleges felhasználóazonosítóval lekért kosár megszűnt. A kliens által megadott `userId`, szerepkör és végösszeg nem ad jogosultságot, és nem határozza meg a rendelés árát. Párhuzamos kosármódosításnál a szerver `409` választ adhat: frissítés után ismételd meg a műveletet.
 
-## Felépítés és korlátok
+## Mappaszerkezet
 
-- `app.js`: az Express beállítása és az útvonalak bekötése.
-- `routes/`: külön fájlban a belépés, termékek, kosár és rendelések végpontjai.
-- `services/cart.js`: a kosár lekérése, összesítése és mentése.
-- `index.js`: adatbáziskapcsolat, munkamenettár, indítás, szabályos leállítás.
-- `lib/`: adatbázis és jelszókezelés.
-- `public/`: keretrendszer és CDN-szkriptek nélküli HTML/CSS/JavaScript felület.
-- `scripts/`: adminlétrehozás és szintaktikai ellenőrzés.
-- `test/`: API-, jelszó- és böngészőtesztek.
+```text
+backend/
+  app.js              Express beállítások
+  index.js            Szerverindítás
+  routes/             API-végpontok
+  services/           Kosárkezelés
+  lib/                Közös ellenőrzések, adatbázis és jelszavak
+  data/               Mintatermékek
+  scripts/            Adatfeltöltéshez és adminisztrációhoz használt parancsok
+  test/               Backendtesztek
+  compose.yaml        Fejlesztői MongoDB
+  .env.example        Backend konfigurációs minta
+frontend/
+  public/             Korábbi HTML/CSS/JavaScript felület
+  test/browser/       Böngészős tesztek
+  README.md           Tudnivalók a későbbi Angular frontendhez
+docs/                 Dokumentáció és az eredeti PDF
+scripts/              Közös fejlesztői ellenőrzések
+package.json          Közös telepítési és indítási parancsok
+```
+
+Minden itt felsorolt `npm` parancsot a projekt gyökerében futtass. Jelenleg egyetlen gyökérszintű `package.json` és lockfájl van; a későbbi Angular projekt a `frontend/` mappába kerülhet saját függőségekkel.
+
+## Korlátok
 
 A kosár és a rendelések egy felhasználói dokumentumban vannak. A rendelés mentése és a kosár ürítése így egy atomi MongoDB-művelet, külön replika nélkül. A bemutató legfeljebb 100 különböző terméket enged a kosárban, termékenként 99 darabot, és 100 rendelést tárol felhasználónként. Nincs fizetés, tényleges készletfoglalás, szállításidíj-számítás, jelszó-visszaállítás, e-mail-hitelesítés vagy teljes adminisztrációs felület. A regisztráció nem kér szükségtelen születési dátumot.
 
-A 30 mintatermék adatai a `data/products.json` fájlban vannak. Az új mintaadatokban a nem igazolt jogú kereskedői képcímeket eltávolítottuk; ellenőrzött fotók még nincsenek. A forrásellenőrzés és a régebbi adatbázisokra vonatkozó tudnivalók: [Termékfotók](docs/product-images.md). Éles üzlethez külön fizetési, készletkezelési, adatkezelési és üzemeltetési tervezés szükséges.
+A 30 mintatermék adatai a `backend/data/products.json` fájlban vannak. Az új mintaadatokban a nem igazolt jogú kereskedői képcímeket eltávolítottuk; ellenőrzött fotók még nincsenek. A forrásellenőrzés és a régebbi adatbázisokra vonatkozó tudnivalók: [Termékfotók](docs/product-images.md). Éles üzlethez külön fizetési, készletkezelési, adatkezelési és üzemeltetési tervezés szükséges.

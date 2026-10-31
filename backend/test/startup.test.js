@@ -5,10 +5,14 @@ const { randomUUID } = require('node:crypto');
 const { connectDatabase } = require('../lib/database');
 const secret = 'test-only-persistent-session-secret-for-restart-check';
 function start(env) {
-  const child = spawn(process.execPath, ['index.js'], {
-    env: { ...process.env, ...env },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
+  const child = spawn(
+    process.execPath,
+    [require('node:path').join(__dirname, '../index.js')],
+    {
+      env: { ...process.env, ...env },
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }
+  );
   const ready = new Promise((resolve, reject) => {
     let output = '';
     const timer = setTimeout(() => {

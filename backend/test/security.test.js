@@ -21,11 +21,15 @@ test('password bounds reject invalid types and excessive input', () => {
 });
 test('production refuses to start without a strong session secret', () => {
   const { spawnSync } = require('node:child_process');
-  const result = spawnSync(process.execPath, ['index.js'], {
-    env: { ...process.env, NODE_ENV: 'production', SESSION_SECRET: '' },
-    encoding: 'utf8',
-    timeout: 5000,
-  });
+  const result = spawnSync(
+    process.execPath,
+    [require('node:path').join(__dirname, '../index.js')],
+    {
+      env: { ...process.env, NODE_ENV: 'production', SESSION_SECRET: '' },
+      encoding: 'utf8',
+      timeout: 5000,
+    }
+  );
   assert.equal(result.status, 1);
   assert.match(result.stderr, /SESSION_SECRET/);
 });

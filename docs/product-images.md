@@ -1,6 +1,6 @@
 # Termékfotók és mintatermékek
 
-A `data/products.json` 30 mintaterméket tartalmaz, a következő sportágakhoz: Box, Muay Thai, MMA, Judo, Karate, Taekwondo. A 16 új termék bemutatótermék, nem valódi gyártói ajánlat. Az árak szemléltető adatok, nem ellenőrzött piaci árak. A méretlista tájékoztató adat; a kosár még nem választ és nem foglal méret szerinti készletet.
+A `backend/data/products.json` 30 mintaterméket tartalmaz, a következő sportágakhoz: Box, Muay Thai, MMA, Judo, Karate, Taekwondo. A 16 új termék bemutatótermék, nem valódi gyártói ajánlat. Az árak szemléltető adatok, nem ellenőrzött piaci árak. A méretlista tájékoztató adat; a kosár még nem választ és nem foglal méret szerinti készletet.
 
 ## Képek állapota
 

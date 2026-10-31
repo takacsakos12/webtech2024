@@ -4,7 +4,9 @@ A backend Node.js + Express + MongoDB alkalmazás. Az Angular frontend külön f
 
 ## A kód felépítése
 
-Az `index.js` indítja a szervert, az `app.js` beállítja az Express-t. A `routes` mappában a `auth.js`, `products.js`, `cart.js` és `orders.js` tartalmazza a négy funkció útvonalait. A kosár árának kiszámítása és mentése a `services/cart.js` fájlban van, mert a kosár és a rendelés is használja. A közös ellenőrzések a `lib/http.js` fájlba kerültek.
+A szerver teljes kódja a `backend/` mappában van. Az `index.js` indítja a szervert, az `app.js` beállítja az Express-t. Az API-végpontok a `routes/`, a kosár közös műveletei a `services/`, az ellenőrzések és adatbázis-kezelés a `lib/` mappában vannak. A backendtesztek helye: `backend/test/`.
+
+A frontend külön, a `frontend/` mappában található. Angular alkalmazás még nincs; a korábbi felületet a `frontend/public/` tartalmazza. Az alábbi parancsok mind a projekt gyökeréből futtatandók.
 
 ## Indítás
 
@@ -12,14 +14,14 @@ Node.js 22+ és futó MongoDB szükséges. Új gépen:
 
 ```sh
 npm ci
-docker compose up -d --wait
+docker compose -f backend/compose.yaml up -d --wait
 npm run seed
 npm run start:api
 ```
 
 Ha már fut MongoDB a 27017-es porton, a Docker-indítást hagyd ki. Új regisztrációkat használunk; régi fiókokhoz nincs migráció. Meglévő adatbázist a program nem töröl.
 
-A `start:api` kizárólag a backendet indítja: nincs HTML-kiszolgálás vagy bejelentkezési oldalra átirányítás. Az ismeretlen útvonalak JSON 404-et adnak. A meglévő `npm start` kompatibilitásból továbbra is kiszolgálja a régi felületet. A `node --env-file=.env scripts/start-api.js` beolvassa a helyi konfigurációt is.
+A `start:api` kizárólag a backendet indítja: nincs HTML-kiszolgálás vagy bejelentkezési oldalra átirányítás. Az ismeretlen útvonalak JSON 404-et adnak. A meglévő `npm start` kompatibilitásból továbbra is kiszolgálja a régi felületet. A `node --env-file=backend/.env backend/scripts/start-api.js` beolvassa a helyi konfigurációt is.
 
 `GET /health` adatbázis-pinget végez. Alapértelmezett port: 8080. Az `API_ONLY=1` változó a normál indításnál is bekapcsolja az API-módot. Éles környezetben HTTPS és legalább 32 karakteres, biztonságosan megadott `SESSION_SECRET` kötelező.
 

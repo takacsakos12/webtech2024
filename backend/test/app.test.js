@@ -333,9 +333,17 @@ test('seed is idempotent and preserves local product edits', async () => {
   uri.pathname = '/' + db.databaseName;
   await db.collection('items').updateOne({ id: 1 }, { $set: { ar: 12345 } });
   const options = { env: { ...process.env, MONGODB_URI: uri.toString() } };
-  await exec(process.execPath, ['createdb.js'], options);
+  await exec(
+    process.execPath,
+    [require('node:path').join(__dirname, '../createdb.js')],
+    options
+  );
   const count = await db.collection('items').countDocuments();
-  await exec(process.execPath, ['createdb.js'], options);
+  await exec(
+    process.execPath,
+    [require('node:path').join(__dirname, '../createdb.js')],
+    options
+  );
   assert.equal(await db.collection('items').countDocuments(), count);
   assert.equal((await db.collection('items').findOne({ id: 1 })).ar, 12345);
   assert.equal(

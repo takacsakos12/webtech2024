@@ -1,6 +1,6 @@
 const { defineConfig, devices } = require('@playwright/test');
 module.exports = defineConfig({
-  testDir: './test/browser',
+  testDir: './frontend/test/browser',
   fullyParallel: false,
   workers: 1,
   retries: process.env.CI ? 1 : 0,

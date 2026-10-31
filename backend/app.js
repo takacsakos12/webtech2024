@@ -89,7 +89,9 @@ function createApp({
     );
     app.get('/register', (_req, res) => res.redirect('/register.html'));
     app.use(
-      express.static(path.join(__dirname, 'public'), { index: 'index.html' })
+      express.static(path.join(__dirname, '../frontend/public'), {
+        index: 'index.html',
+      })
     );
   }
   app.use((_req, _res, next) =>

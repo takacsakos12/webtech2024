@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 const { randomUUID } = require('node:crypto');
-const { createApp } = require('../../app');
-const { connectDatabase } = require('../../lib/database');
-const { items } = require('../../createdb');
+const { createApp } = require('../../../backend/app');
+const { connectDatabase } = require('../../../backend/lib/database');
+const { items } = require('../../../backend/createdb');
 let client, db, server, base;
 test.beforeAll(async () => {
   const uri = new URL(
