@@ -24,7 +24,9 @@ function browser() {
         body: body === undefined ? undefined : JSON.stringify(body),
         redirect: 'manual',
       });
-      const setCookie = response.headers.get('set-cookie');
+      const setCookie = response.headers
+        .getSetCookie()
+        .find((cookie) => cookie.startsWith('fightshop.sid='));
       if (setCookie) cookie = setCookie.split(';')[0];
       const data = response.headers
         .get('content-type')

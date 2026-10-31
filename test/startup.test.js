@@ -63,7 +63,10 @@ test('real startup uses Mongo-backed sessions that survive a server restart', as
     instance = start(env);
     let base = await instance.ready;
     let response = await fetch(base + '/api/session');
-    const cookie = response.headers.get('set-cookie').split(';')[0];
+    const cookie = response.headers
+      .getSetCookie()
+      .find((cookie) => cookie.startsWith('fightshop.sid='))
+      .split(';')[0];
     const { csrfToken } = await response.json();
     response = await fetch(base + '/register', {
       method: 'POST',
@@ -79,7 +82,10 @@ test('real startup uses Mongo-backed sessions that survive a server restart', as
       }),
     });
     assert.equal(response.status, 201);
-    const authenticated = response.headers.get('set-cookie').split(';')[0];
+    const authenticated = response.headers
+      .getSetCookie()
+      .find((cookie) => cookie.startsWith('fightshop.sid='))
+      .split(';')[0];
     await response.json();
     assert.equal(await db.collection('sessions').countDocuments(), 1);
     await stop(instance.child);

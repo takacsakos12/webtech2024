@@ -2,6 +2,10 @@
 
 Magyar nyelvű, reszponzív küzdősport-webshop Express és MongoDB alapon. Oktatási bemutató: a rendelésleadás adatokat rögzít, valós fizetés és kiszállítás nincs.
 
+## Backend fejlesztési irány
+
+A következő frontend Angular lesz; jelenleg a backend készül. Külön API-indítás: `npm run start:api`. Az Angular-integráció, hitelesítés és a teljes végpontlista: [Backend dokumentáció](docs/backend.md). A korábbi HTML-felület kompatibilitásból megmaradt.
+
 ## Funkciók
 
 - Regisztráció, bejelentkezés, kijelentkezés; sózott scrypt jelszóhash és MongoDB-ben tárolt munkamenetek.

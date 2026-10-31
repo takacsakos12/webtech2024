@@ -40,6 +40,7 @@ function createApp({
   sessionSecret,
   production = false,
   trustProxy = false,
+  apiOnly = false,
 }) {
   if (!db || !sessionSecret)
     throw new Error('Database and session secret are required');
@@ -87,12 +88,20 @@ function createApp({
   );
   const csrf = (req) =>
     (req.session.csrfToken ||= randomBytes(32).toString('hex'));
+  const csrfCookie = (req, res) =>
+    res.cookie('XSRF-TOKEN', csrf(req), {
+      httpOnly: false,
+      secure: production,
+      sameSite: 'lax',
+      path: '/',
+    });
   app.use((req, res, next) => {
     if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
     res.set('Cache-Control', 'no-store');
     if (
       !req.session.csrfToken ||
-      req.get('X-CSRF-Token') !== req.session.csrfToken
+      (req.get('X-CSRF-Token') || req.get('X-XSRF-TOKEN')) !==
+        req.session.csrfToken
     )
       return next(fail(403, 'A munkamenet lejárt. Frissítsd az oldalt.'));
     next();
@@ -144,13 +153,14 @@ function createApp({
     })
   );
   app.get(
-    '/api/session',
+    ['/api/session', '/api/auth/session'],
     asyncRoute(async (req, res) => {
       const user = objectId(req.session.userId)
         ? await db
             .collection('users')
             .findOne({ _id: new ObjectId(req.session.userId) })
         : null;
+      csrfCookie(req, res);
       res.json({ user: user ? publicUser(user) : null, csrfToken: csrf(req) });
     })
   );
@@ -202,6 +212,7 @@ function createApp({
     const result = await db.collection('users').insertOne(user);
     user._id = result.insertedId;
     await authenticate(req, user);
+    csrfCookie(req, res);
     res.status(201).json({ user: publicUser(user), csrfToken: csrf(req) });
   });
   const login = asyncRoute(async (req, res) => {
@@ -220,17 +231,31 @@ function createApp({
     if (!(await verifyPassword(password, user?.passwordHash || dummy)) || !user)
       throw fail(401, 'Hibás felhasználónév vagy jelszó.');
     await authenticate(req, user);
+    csrfCookie(req, res);
     res.json({ user: publicUser(user), csrfToken: csrf(req) });
   });
-  app.post(['/register', '/api/users/register'], loginLimit, register);
-  app.post(['/login', '/api/users/login'], loginLimit, login);
   app.post(
-    '/api/logout',
+    ['/register', '/api/users/register', '/api/auth/register'],
+    loginLimit,
+    register
+  );
+  app.post(
+    ['/login', '/api/users/login', '/api/auth/login'],
+    loginLimit,
+    login
+  );
+  app.post(
+    ['/api/logout', '/api/auth/logout'],
     asyncRoute(async (req, res) => {
       await new Promise((resolve, reject) =>
         req.session.destroy((err) => (err ? reject(err) : resolve()))
       );
       res.clearCookie('fightshop.sid');
+      res.clearCookie('XSRF-TOKEN', {
+        path: '/',
+        sameSite: 'lax',
+        secure: production,
+      });
       res.json({ message: 'Sikeresen kijelentkeztél.' });
     })
   );
@@ -248,7 +273,7 @@ function createApp({
     })
   );
   app.post(
-    '/api/items/add',
+    ['/api/items', '/api/items/add'],
     auth,
     admin,
     asyncRoute(async (req, res) => {
@@ -280,6 +305,21 @@ function createApp({
       };
       const result = await db.collection('items').insertOne(item);
       res.status(201).json({ ...item, _id: result.insertedId });
+    })
+  );
+  app.get(
+    '/api/items/:itemId',
+    asyncRoute(async (req, res) => {
+      if (!objectId(req.params.itemId))
+        throw fail(400, 'Érvénytelen termékazonosító.');
+      const item = await db
+        .collection('items')
+        .findOne(
+          { _id: new ObjectId(req.params.itemId) },
+          { projection: { seedId: 0 } }
+        );
+      if (!item) throw fail(404, 'A termék nem található.');
+      res.json(item);
     })
   );
   const cartDetails = async (user) => {
@@ -398,6 +438,13 @@ function createApp({
   app.get('/api/orders', auth, (req, res) =>
     res.json((req.user.orders || []).slice().reverse())
   );
+  app.get('/api/orders/:orderId', auth, (req, res, next) => {
+    const order = (req.user.orders || []).find(
+      (order) => order.id === req.params.orderId
+    );
+    if (!order) return next(fail(404, 'A rendelés nem található.'));
+    res.json(order);
+  });
   app.post(
     '/api/orders',
     auth,
@@ -451,18 +498,22 @@ function createApp({
   app.use('/api', (_req, _res, next) =>
     next(fail(404, 'Ez a végpont nem található.'))
   );
-  app.get(['/cart.html'], (req, res, next) =>
-    req.session.userId
-      ? next()
-      : res.redirect('/login.html?next=' + encodeURIComponent(req.originalUrl))
-  );
-  app.get('/login', (_req, res) =>
-    res.redirect('/login.html?next=' + encodeURIComponent(req.originalUrl))
-  );
-  app.get('/register', (_req, res) => res.redirect('/register.html'));
-  app.use(
-    express.static(path.join(__dirname, 'public'), { index: 'index.html' })
-  );
+  if (!apiOnly) {
+    app.get(['/cart.html'], (req, res, next) =>
+      req.session.userId
+        ? next()
+        : res.redirect(
+            '/login.html?next=' + encodeURIComponent(req.originalUrl)
+          )
+    );
+    app.get('/login', (_req, res) =>
+      res.redirect('/login.html?next=' + encodeURIComponent(req.originalUrl))
+    );
+    app.get('/register', (_req, res) => res.redirect('/register.html'));
+    app.use(
+      express.static(path.join(__dirname, 'public'), { index: 'index.html' })
+    );
+  }
   app.use((_req, _res, next) => next(fail(404, 'Az oldal nem található.')));
   app.use((err, _req, res, _next) => {
     const status = err.code === 11000 ? 409 : err.status || 500;

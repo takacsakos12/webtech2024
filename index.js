@@ -24,6 +24,7 @@ async function main() {
     sessionSecret:
       process.env.SESSION_SECRET || randomBytes(32).toString('hex'),
     production,
+    apiOnly: process.env.API_ONLY === '1',
     trustProxy: process.env.TRUST_PROXY === '1',
   });
   const server = app.listen(

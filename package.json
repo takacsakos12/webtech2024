@@ -17,7 +17,8 @@
     "migrate:users": "node scripts/migrate-users.js",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "start:api": "node scripts/start-api.js"
   },
   "author": "Takács Ákos",
   "license": "ISC",
