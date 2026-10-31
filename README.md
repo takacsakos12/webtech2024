@@ -109,7 +109,9 @@ A korábbi nyilvános felhasználólista és tetszőleges felhasználóazonosít
 
 ## Felépítés és korlátok
 
-- `app.js`: tesztelhető Express-alkalmazás, API és hozzáférés-ellenőrzés.
+- `app.js`: az Express beállítása és az útvonalak bekötése.
+- `routes/`: külön fájlban a belépés, termékek, kosár és rendelések végpontjai.
+- `services/cart.js`: a kosár lekérése, összesítése és mentése.
 - `index.js`: adatbáziskapcsolat, munkamenettár, indítás, szabályos leállítás.
 - `lib/`: adatbázis és jelszókezelés.
 - `public/`: keretrendszer és CDN-szkriptek nélküli HTML/CSS/JavaScript felület.

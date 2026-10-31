@@ -2,6 +2,10 @@
 
 A backend Node.js + Express + MongoDB alkalmazás. Az Angular frontend külön fejlesztési lépés; ebben a változtatásban nem készült Angular alkalmazás.
 
+## A kód felépítése
+
+Az `index.js` indítja a szervert, az `app.js` beállítja az Express-t. A `routes` mappában a `auth.js`, `products.js`, `cart.js` és `orders.js` tartalmazza a négy funkció útvonalait. A kosár árának kiszámítása és mentése a `services/cart.js` fájlban van, mert a kosár és a rendelés is használja. A közös ellenőrzések a `lib/http.js` fájlba kerültek.
+
 ## Indítás
 
 Node.js 22+ és futó MongoDB szükséges. Új gépen:
