@@ -1,65 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webshop</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/items')
-                .then(response => response.json())
-                .then(items => {
-                    const container = document.getElementById('items-container');
-                    items.forEach(item => {
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'item';
-                        itemElement.innerHTML = `
-                            <img src="${item.img}" alt="${item.termek_nev}">
-                            <h3>${item.termek_nev}</h3>
-                            <p>${item.leiras}</p>
-                            <p>${item.ar} HUF</p>
-                            <button onclick="addToCart('${item._id}')">Kosárba</button>
-                        `;
-                        container.appendChild(itemElement);
-                    });
-                });
-        });
-
-        function addToCart(itemId) {
-            fetch('/api/cart/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ itemId, userId: 'USER_ID' })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(`Hozzáadva a kosárhoz: ${data.termek_nev}`);
-            });
-        }
-    </script>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Magyar Fight Shop</h1>
-            <div class="cart-icon">
-                <a href="cart.html">
-                    <img src="https://static.vecteezy.com/system/resources/previews/027/381/351/original/shopping-cart-icon-shopping-trolley-icon-shopping-cart-logo-container-for-goods-and-products-economics-symbol-design-elements-basket-symbol-silhouette-retail-design-elements-vector.jpg" alt="Cart" />
-                </a>
-            </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Magyar Fight Shop – felszerelések boxhoz, MMA-hoz és harcművészetekhez."
+    />
+    <title>Felszerelések · Magyar Fight Shop</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body data-page="shop">
+    <a class="skip-link" href="#main">Ugrás a tartalomra</a>
+    <header class="site-header">
+      <nav class="nav wrap" aria-label="Fő navigáció">
+        <a class="brand" href="/"
+          >MF<span class="brand-mark">/</span>SHOP<span class="brand-sub"
+            >MAGYAR FIGHT SHOP</span
+          ></a
+        >
+        <div class="nav-links">
+          <a href="/webshop.html">Felszerelések</a
+          ><a href="/login.html" data-guest>Bejelentkezés</a
+          ><a href="/register.html" data-guest>Regisztráció</a
+          ><a href="/cart.html" data-auth hidden
+            >Kosár <span class="badge" id="cart-count">0</span></a
+          ><span id="username" data-auth hidden></span
+          ><button class="link-button" id="logout" data-auth hidden>
+            Kijelentkezés
+          </button>
         </div>
+      </nav>
     </header>
-    <main>
-        <div class="shop-container">
-            <h2>Termékek</h2>
-            <div id="items-container"></div>
+    <main id="main">
+      <section class="catalog wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">KÉSZEN A KÖVETKEZŐ MENETRE</p>
+            <h1>Felszerelések<span class="accent">.</span></h1>
+          </div>
+          <p class="muted">A megfelelő alapok minden edzéshez.</p>
         </div>
+        <div class="filters">
+          <div class="search-field">
+            <label for="search">Mit keresel?</label
+            ><input
+              type="search"
+              id="search"
+              placeholder="Termék vagy gyártó neve…"
+            />
+          </div>
+          <div>
+            <label for="category">Sportág</label
+            ><select id="category">
+              <option value="">Összes sportág</option>
+            </select>
+          </div>
+          <div>
+            <label for="sort">Rendezés</label
+            ><select id="sort">
+              <option value="default">Ajánlott</option>
+              <option value="price-asc">Ár: növekvő</option>
+              <option value="price-desc">Ár: csökkenő</option>
+              <option value="name">Név szerint</option>
+            </select>
+          </div>
+        </div>
+        <p class="result-count" id="result-count" aria-live="polite">
+          Termékek betöltése…
+        </p>
+        <div class="product-grid" id="items-container" aria-busy="true"></div>
+        <section class="form-card admin-panel" id="admin-panel" hidden>
+          <h2>Új termék</h2>
+          <form id="product-form">
+            <label for="product-name">Terméknév</label
+            ><input
+              id="product-name"
+              name="termek_nev"
+              minlength="2"
+              maxlength="120"
+              required
+            /><label for="product-description">Leírás</label
+            ><textarea
+              id="product-description"
+              name="leiras"
+              minlength="5"
+              maxlength="2000"
+              required
+            ></textarea
+            ><label for="product-price">Ár (Ft)</label
+            ><input
+              type="number"
+              id="product-price"
+              name="ar"
+              min="1"
+              max="10000000"
+              step="1"
+              required
+            /><label for="product-category">Sportág</label
+            ><input
+              id="product-category"
+              name="kategoria"
+              maxlength="60"
+              required
+            /><label for="product-brand">Gyártó</label
+            ><input
+              id="product-brand"
+              name="gyarto"
+              maxlength="60"
+              required
+            /><label for="product-image">Kép HTTPS-címe</label
+            ><input type="url" id="product-image" name="img" required /><button
+              type="submit"
+            >
+              Termék hozzáadása
+            </button>
+          </form>
+        </section>
+      </section>
     </main>
-    <footer>
-        <p>&copy; Magyar Fight Shop</p>
+    <footer class="site-footer wrap">
+      <a class="brand" href="/">MF<span class="brand-mark">/</span>SHOP</a>
+      <p>Küzdősport. Felszerelés. Elszántság.</p>
+      <small
+        >Oktatási bemutatóprojekt · Valós fizetés és kiszállítás nélkül.</small
+      >
     </footer>
-</body>
+    <div
+      class="notification"
+      id="notification"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></div>
+  </body>
 </html>

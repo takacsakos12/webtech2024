@@ -1,33 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bejelentkezés</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Bejelentkezés</h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Magyar Fight Shop – felszerelések boxhoz, MMA-hoz és harcművészetekhez."
+    />
+    <title>Bejelentkezés · Magyar Fight Shop</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body data-page="login">
+    <a class="skip-link" href="#main">Ugrás a tartalomra</a>
+    <header class="site-header">
+      <nav class="nav wrap" aria-label="Fő navigáció">
+        <a class="brand" href="/"
+          >MF<span class="brand-mark">/</span>SHOP<span class="brand-sub"
+            >MAGYAR FIGHT SHOP</span
+          ></a
+        >
+        <div class="nav-links">
+          <a href="/webshop.html">Felszerelések</a
+          ><a href="/login.html" data-guest>Bejelentkezés</a
+          ><a href="/register.html" data-guest>Regisztráció</a
+          ><a href="/cart.html" data-auth hidden
+            >Kosár <span class="badge" id="cart-count">0</span></a
+          ><span id="username" data-auth hidden></span
+          ><button class="link-button" id="logout" data-auth hidden>
+            Kijelentkezés
+          </button>
         </div>
+      </nav>
     </header>
-    <main>
-        <div class="form-container">
-            <div class="form-box">
-                <h2>Bejelentkezés</h2>
-                <form action="/login" method="POST">
-                    <label for="username">Felhasználónév:</label>
-                    <input type="text" id="username" name="username" required>
-                    <label for="password">Jelszó:</label>
-                    <input type="password" id="password" name="password" required>
-                    <button type="submit">Bejelentkezés</button>
-                </form>
-            </div>
+    <main id="main">
+      <section class="auth-layout wrap">
+        <div class="auth-copy">
+          <p class="eyebrow">ÜDV ÚJRA A CSAPATBAN</p>
+          <h1>Folytasd, ahol<br /><em>abbahagytad.</em></h1>
+          <p class="lead">A felszerelésed és a következő edzésed már vár.</p>
         </div>
+        <div class="form-card">
+          <h2>Bejelentkezés</h2>
+          <p>Még nincs fiókod? <a href="/register.html">Regisztrálj itt.</a></p>
+          <form id="auth-form">
+            <label for="username-field">Felhasználónév</label
+            ><input
+              id="username-field"
+              name="username"
+              autocomplete="username"
+              maxlength="40"
+              required
+            /><label for="password">Jelszó</label
+            ><input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              maxlength="128"
+              required
+            />
+            <p class="form-error" role="alert" id="form-error"></p>
+            <button type="submit">Bejelentkezés →</button>
+          </form>
+        </div>
+      </section>
     </main>
-    <footer>
-        <p>&copy; Magyar Fight Shop</p>
+    <footer class="site-footer wrap">
+      <a class="brand" href="/">MF<span class="brand-mark">/</span>SHOP</a>
+      <p>Küzdősport. Felszerelés. Elszántság.</p>
+      <small
+        >Oktatási bemutatóprojekt · Valós fizetés és kiszállítás nélkül.</small
+      >
     </footer>
-</body>
+    <div
+      class="notification"
+      id="notification"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></div>
+  </body>
 </html>

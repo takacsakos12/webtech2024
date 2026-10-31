@@ -1,79 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCart();
-
-            function updateCart() {
-                fetch('/api/cart/USER_ID')
-                    .then(response => response.json())
-                    .then(items => {
-                        const cartContainer = document.getElementById('cart-items');
-                        cartContainer.innerHTML = '';
-                        let totalCost = 0;
-                        items.forEach(item => {
-                            totalCost += item.ar;
-                            const itemElement = document.createElement('div');
-                            itemElement.className = 'cart-item';
-                            itemElement.innerHTML = `
-                                <p>${item.termek_nev} - ${item.ar} HUF</p>
-                                <button onclick="removeFromCart('${item._id}')">Eltávolítás</button>
-                            `;
-                            cartContainer.appendChild(itemElement);
-                        });
-                        document.getElementById('total-cost').innerText = totalCost + ' HUF';
-                    });
-            }
-
-            window.removeFromCart = function(cartItemId) {
-                fetch(`/api/cart/remove/${cartItemId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    updateCart();
-                });
-            }
-        });
-    </script>
-</head>
-<body>
-    <header>
-        <h1>Kosár</h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Magyar Fight Shop – felszerelések boxhoz, MMA-hoz és harcművészetekhez."
+    />
+    <title>Kosaram · Magyar Fight Shop</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body data-page="cart">
+    <a class="skip-link" href="#main">Ugrás a tartalomra</a>
+    <header class="site-header">
+      <nav class="nav wrap" aria-label="Fő navigáció">
+        <a class="brand" href="/"
+          >MF<span class="brand-mark">/</span>SHOP<span class="brand-sub"
+            >MAGYAR FIGHT SHOP</span
+          ></a
+        >
+        <div class="nav-links">
+          <a href="/webshop.html">Felszerelések</a
+          ><a href="/login.html" data-guest>Bejelentkezés</a
+          ><a href="/register.html" data-guest>Regisztráció</a
+          ><a href="/cart.html" data-auth hidden
+            >Kosár <span class="badge" id="cart-count">0</span></a
+          ><span id="username" data-auth hidden></span
+          ><button class="link-button" id="logout" data-auth hidden>
+            Kijelentkezés
+          </button>
+        </div>
+      </nav>
     </header>
-    <main>
-        <div class="cart-container">
-            <h2>Termékek a kosárban</h2>
-            <div id="cart-items"></div>
-            <p>Összesen: <span id="total-cost">0 HUF</span></p>
-        </div>
-        <div class="order-form-container">
-            <h2>Rendelési adatok</h2>
+    <main id="main">
+      <section class="catalog wrap">
+        <p class="eyebrow">A TE VÁLASZTÁSOD</p>
+        <h1>A kosarad<span class="accent">.</span></h1>
+        <a class="text-link" href="/webshop.html"
+          >← Vissza a felszerelésekhez</a
+        >
+        <div class="checkout-layout">
+          <section aria-label="Kosár tartalma">
+            <div id="cart-items" aria-busy="true"><p>Betöltés…</p></div>
+          </section>
+          <aside class="form-card checkout-card">
+            <p class="eyebrow">RENDELÉS ÖSSZESÍTÉSE</p>
+            <div class="total-row">
+              <span>Termékek összesen</span><strong id="total-cost">—</strong>
+            </div>
+            <p class="muted">
+              Bemutató rendelés. Nem történik fizetés vagy kiszállítás.
+            </p>
             <form id="order-form">
-                <label for="name">Név:</label>
-                <input type="text" id="name" name="name" required>
-                
-                <label for="address">Szállítási cím:</label>
-                <input type="text" id="address" name="address" required>
-                
-                <label for="payment-method">Fizetési mód:</label>
-                <select id="payment-method" name="payment-method" required>
-                    <option value="cash_on_delivery">Utánvét</option>
-                    <option value="prepayment">Elővétel</option>
-                </select>
-                
-                <button type="submit">Rendelés leadása</button>
+              <label for="name">Teljes név</label
+              ><input
+                id="name"
+                name="name"
+                autocomplete="name"
+                minlength="3"
+                maxlength="120"
+                required
+              /><label for="address">Teljes szállítási cím</label
+              ><textarea
+                id="address"
+                name="address"
+                autocomplete="street-address"
+                minlength="10"
+                maxlength="300"
+                placeholder="Irányítószám, város, utca, házszám"
+                required
+              ></textarea
+              ><label for="payment-method">Fizetési mód</label
+              ><select id="payment-method" name="paymentMethod">
+                <option value="cash_on_delivery">Utánvét (bemutató)</option>
+              </select>
+              <p class="form-error" role="alert" id="form-error"></p>
+              <button id="order-submit" type="submit" disabled>
+                Bemutató rendelés leadása →
+              </button>
             </form>
+          </aside>
         </div>
+        <section class="orders-section">
+          <h2>Korábbi rendeléseid</h2>
+          <div id="orders"><p>Betöltés…</p></div>
+        </section>
+      </section>
     </main>
-    <footer>
-        <p>&copy; Magyar Fight Shop</p>
+    <footer class="site-footer wrap">
+      <a class="brand" href="/">MF<span class="brand-mark">/</span>SHOP</a>
+      <p>Küzdősport. Felszerelés. Elszántság.</p>
+      <small
+        >Oktatási bemutatóprojekt · Valós fizetés és kiszállítás nélkül.</small
+      >
     </footer>
-</body>
+    <div
+      class="notification"
+      id="notification"
+      role="status"
+      aria-live="polite"
+      hidden
+    ></div>
+  </body>
 </html>

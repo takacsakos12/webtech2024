@@ -1,20 +1,36 @@
 {
   "name": "webtech2024",
-  "version": "1.0.0",
-  "description": "Webshop project",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Magyar Fight Shop – Express és MongoDB alapú webshop",
   "main": "index.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "seed": "node createdb.js",
+    "admin": "node scripts/create-admin.js",
+    "test": "node --test test/*.test.js",
+    "check": "node scripts/check.js",
+    "migrate:users": "node scripts/migrate-users.js",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "author": "Takács Ákos",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "mongodb": "^3.6.3",
-    "mongoose": "^5.12.3",
-    "uuid": "^8.3.2"
+    "connect-mongo": "^5.1.0",
+    "express": "^4.22.1",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.19.0",
+    "helmet": "^8.1.0",
+    "mongodb": "^6.21.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "prettier": "^3.9.10"
   }
 }

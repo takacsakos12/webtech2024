@@ -44,3 +44,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+# Local credentials and browser test output
+.env
+.env.*
+!.env.example
+/test-results/
+/playwright-report/

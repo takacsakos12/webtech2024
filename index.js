@@ -1,113 +1,57 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const port = process.env.PORT || 8080;
-const logger = require('./middleware/logger');
-const MongoClient = require('mongodb').MongoClient;
-const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
-const bodyParser = require('body-parser');
-const uuid = require('uuid');
-const users = require('./middleware/api/users');
-const items = require('./middleware/api/items');
-const cart = require('./middleware/api/carts'); // Add cart middleware
+const { randomBytes } = require('node:crypto');
+const MongoStore = require('connect-mongo');
+const { createApp } = require('./app');
+const { connectDatabase } = require('./lib/database');
 
-let db;
-const mongourl = "mongodb://localhost:27017/store";
-
-MongoClient.connect(mongourl, { useUnifiedTopology: true }, (err, client) => {
-    if (err) return console.log(err);
-    db = client.db("store");
-    app.locals.db = db; // Store the db connection in app.locals
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
+async function main() {
+  const production = process.env.NODE_ENV === 'production';
+  if (
+    production &&
+    (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32)
+  )
+    throw new Error(
+      'Production requires SESSION_SECRET with at least 32 characters'
+    );
+  const { client, db } = await connectDatabase();
+  const store = MongoStore.create({
+    clientPromise: Promise.resolve(client),
+    dbName: db.databaseName,
+    collectionName: 'sessions',
+  });
+  const app = createApp({
+    db,
+    sessionStore: store,
+    sessionSecret:
+      process.env.SESSION_SECRET || randomBytes(32).toString('hex'),
+    production,
+    trustProxy: process.env.TRUST_PROXY === '1',
+  });
+  const server = app.listen(
+    Number(process.env.PORT || 8080),
+    process.env.HOST || '0.0.0.0',
+    () => console.log(`Fight Shop listening on port ${server.address().port}`)
+  );
+  let stopping = false;
+  const shutdown = () => {
+    if (stopping) return;
+    stopping = true;
+    const timeout = setTimeout(() => process.exit(1), 10000);
+    timeout.unref();
+    server.close(async () => {
+      await client.close();
+      clearTimeout(timeout);
+      process.exit(0);
     });
-});
-
-app.use(cookieParser());
-app.use(expressSession({
-    secret: 'logininfo',
-    resave: true,
-    saveUninitialized: true
-}));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(logger);
-app.use('/api/users', users);
-app.use('/api/items', items);
-app.use('/api/cart', cart); // Use cart middleware
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    db.collection('users').findOne({ username, password }, (err, user) => {
-        if (err) return console.error(err);
-        if (!user) {
-            res.redirect('/hiba.html');
-        } else {
-            req.session.uid = user.id;
-            res.redirect('/webshop.html');
-        }
-    });
-});
-
-app.post('/register', (req, res) => {
-    const newUser = {
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        birth: req.body.birth,
-        id: uuid.v4(),
-        cart: []
-    };
-
-    db.collection('users').findOne({ $or: [{ username: newUser.username }, { email: newUser.email }] }, (err, user) => {
-        if (err) return console.error(err);
-        if (user) {
-            res.redirect('/hiba.html');
-        } else {
-            db.collection('users').insertOne(newUser, (err, result) => {
-                if (err) return console.error(err);
-                res.redirect('/sikerreg.html');
-            });
-        }
-    });
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'register.html'));
-});
-
-app.get('/webshop.html', (req, res) => {
-    if (!req.session.uid) {
-        res.redirect('/');
-    } else {
-        res.sendFile(path.join(__dirname, 'public', 'webshop.html'));
-    }
-});
-
-app.get('/cart.html', (req, res) => {
-    if (!req.session.uid) {
-        res.redirect('/');
-    } else {
-        res.sendFile(path.join(__dirname, 'public', 'cart.html'));
-    }
-});
-
-app.get('*', (req, res, next) => {
-    if (!req.session.uid) {
-        res.redirect('/');
-    } else {
-        next();
-    }
+  };
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
+  server.on('error', async (error) => {
+    console.error(error.message);
+    await client.close();
+    process.exitCode = 1;
+  });
+}
+main().catch((error) => {
+  console.error('Startup failed:', error.message);
+  process.exitCode = 1;
 });
