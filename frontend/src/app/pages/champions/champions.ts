@@ -65,7 +65,11 @@ export class Champions {
     const query = this.search.trim().toLocaleLowerCase('hu');
 
     return this.champions.filter((champion) => {
-      return champion.name.toLocaleLowerCase('hu').includes(query) || champion.weightClass.toLocaleLowerCase('hu').includes(query) || champion.organization.toLocaleLowerCase('hu').includes(query);
+      return (
+        champion.name.toLocaleLowerCase('hu').includes(query) ||
+        champion.weightClass.toLocaleLowerCase('hu').includes(query) ||
+        champion.organization.toLocaleLowerCase('hu').includes(query)
+      );
     });
   }
 }

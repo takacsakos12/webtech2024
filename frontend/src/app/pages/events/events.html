@@ -1,1 +1,142 @@
-<p>events works!</p>
+<section class="events-page" aria-labelledby="events-title">
+  <h1 id="events-title">MMA-eseménykereső</h1>
+
+  <p class="demo-note">
+    <strong>Bemutatóadatok.</strong>
+    Az események nevei, helyszínei és dátumai a szűrés gyakorlására szolgálnak, nem ellenőrzött
+    versenynaptár.
+  </p>
+
+  <fieldset class="filters">
+    <legend>Események szűrése</legend>
+
+    <div class="filter-grid">
+      <div class="field search-field">
+        <label for="event-search"> Esemény vagy helyszín keresése </label>
+
+        <input
+          id="event-search"
+          type="search"
+          #searchInput
+          [value]="search()"
+          (input)="search.set(searchInput.value)"
+          placeholder="Például: Vegas vagy ONE"
+        />
+      </div>
+
+      <div class="field">
+        <label for="organization">Szervezet</label>
+
+        <select
+          id="organization"
+          #organizationInput
+          [value]="selectedOrganization()"
+          (change)="selectedOrganization.set(organizationInput.value)"
+        >
+          <option value="">Összes szervezet</option>
+
+          @for (organization of organizations(); track organization) {
+            <option [value]="organization">
+              {{ organization }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="start-date">Ettől</label>
+
+        <input
+          id="start-date"
+          type="date"
+          #startInput
+          [value]="startDate()"
+          (input)="startDate.set(startInput.value)"
+          [attr.aria-invalid]="dateRangeError() ? 'true' : null"
+          [attr.aria-describedby]="dateRangeError() ? 'date-help date-error' : 'date-help'"
+        />
+      </div>
+
+      <div class="field">
+        <label for="end-date">Eddig</label>
+
+        <input
+          id="end-date"
+          type="date"
+          #endInput
+          [value]="endDate()"
+          (input)="endDate.set(endInput.value)"
+          [attr.aria-invalid]="dateRangeError() ? 'true' : null"
+          [attr.aria-describedby]="dateRangeError() ? 'date-help date-error' : 'date-help'"
+        />
+      </div>
+
+      <div class="field">
+        <label for="sort-order">Rendezés</label>
+
+        <select
+          id="sort-order"
+          #sortInput
+          [value]="sortOrder()"
+          (change)="sortOrder.set(sortInput.value)"
+        >
+          <option value="asc">Legkorábbi elöl</option>
+          <option value="desc">Legkésőbbi elöl</option>
+        </select>
+      </div>
+    </div>
+
+    <p id="date-help" class="help">
+      Mindkét dátum opcionális. A megadott kezdő- és végdátum napja is beleszámít a találatokba.
+    </p>
+
+    <button type="button" (click)="clearFilters()">Szűrők törlése</button>
+  </fieldset>
+
+  @if (dateRangeError()) {
+    <p id="date-error" class="date-error" role="alert">
+      {{ dateRangeError() }}
+    </p>
+  }
+
+  <p class="result-count" role="status" aria-live="polite" aria-atomic="true">
+    @if (dateRangeError()) {
+      A találatok megjelenítéséhez javítsd a dátumtartományt.
+    } @else {
+      Találatok: {{ filteredEvents().length }} / {{ events().length }}
+    }
+  </p>
+
+  @if (!dateRangeError()) {
+    <div class="event-grid">
+      @for (event of filteredEvents(); track event.id) {
+        <article class="event-card">
+          <p class="organization">{{ event.organization }}</p>
+
+          <h2>{{ event.name }}</h2>
+
+          <dl>
+            <div>
+              <dt>Dátum</dt>
+              <dd>
+                <time [attr.datetime]="event.date">
+                  {{ event.date | date: 'yyyy. MM. dd.' }}
+                </time>
+              </dd>
+            </div>
+
+            <div>
+              <dt>Helyszín</dt>
+              <dd>{{ event.location }}</dd>
+            </div>
+          </dl>
+        </article>
+      } @empty {
+        <div class="empty-state">
+          <h2>Nincs találat</h2>
+          <p>Nincs a szűrőknek megfelelő esemény. Módosítsd a keresést vagy töröld a szűrőket.</p>
+        </div>
+      }
+    </div>
+  }
+</section>
