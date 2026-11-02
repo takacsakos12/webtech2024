@@ -1,1 +1,43 @@
-<p>champions works!</p>
+<section class="champions-page">
+  <h1>Férfi MMA-bajnokok</h1>
+
+  <p>Adatok ellenőrizve: {{ lastChecked }}</p>
+
+  <p>
+    Forrás:
+    <a href="https://www.ufc.com/rankings"> UFC hivatalos ranglista </a>
+  </p>
+
+  <label for="champion-search">Versenyző keresése:</label>
+  <input id="champion-search" type="search" [(ngModel)]="search" placeholder="Például: Islam vagy Légsúly vagy UFC" />
+
+  <div class="table-container">
+    <table>
+      <caption>
+        Versenyzők súlycsoport és szervezet szerint
+      </caption>
+
+      <thead>
+        <tr>
+          <th scope="col">Név</th>
+          <th scope="col">Súlycsoport</th>
+          <th scope="col">Szervezet</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (champion of filteredChampions; track champion.id) {
+          <tr>
+            <td>{{ champion.name }}</td>
+            <td>{{ champion.weightClass }}</td>
+            <td>{{ champion.organization }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3">Nincs ilyen nevű vagy súlycsoportú vagy szervezetű versenyző.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
