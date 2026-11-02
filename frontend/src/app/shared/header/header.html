@@ -1,9 +1,63 @@
-<header>
-  <a routerLink="/">MMA Magyarország</a>
+<header class="site-header" (keydown.escape)="closeMenu(); menuButton.focus()">
+  <div class="header-container">
+    <a class="brand" routerLink="/" aria-label="MMA Magyarország – kezdőlap" (click)="closeMenu()">
+      <span class="brand-name">MMA</span>
+      <span class="brand-description">Magyarország</span>
+    </a>
 
-  <nav aria-label="Fő navigáció">
-    <a routerLink="/bajnokok">Bajnokok</a>
-    <a routerLink="/esemenyek">Események</a>
-    <a routerLink="/webshop">Webshop</a>
-  </nav>
+    <button
+      #menuButton
+      class="menu-toggle"
+      type="button"
+      aria-controls="main-navigation"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      {{ menuOpen() ? 'Bezárás' : 'Menü' }}
+    </button>
+
+    <nav
+      id="main-navigation"
+      class="navigation"
+      [class.open]="menuOpen()"
+      aria-label="Fő navigáció"
+    >
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+      >
+        Kezdőlap
+      </a>
+
+      <a
+        routerLink="/bajnokok"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+      >
+        Bajnokok
+      </a>
+
+      <a
+        routerLink="/esemenyek"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+      >
+        Események
+      </a>
+
+      <a
+        routerLink="/webshop"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+      >
+        Webshop
+      </a>
+    </nav>
+  </div>
 </header>
