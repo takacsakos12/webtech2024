@@ -7,7 +7,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "../backend/src/src/data/events.data.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

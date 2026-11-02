@@ -1,14 +1,22 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+
 import { DatePipe } from '@angular/common';
-import { DEMO_EVENTS } from './events.data';
+import { firstValueFrom } from 'rxjs';
+import { EventsService } from '../../services/events.service';
+import { MmaEvent } from '../../models/mma-event';
+
 @Component({
   selector: 'app-events',
   imports: [DatePipe],
   templateUrl: './events.html',
   styleUrl: './events.css',
 })
-export class Events {
-  events = signal(DEMO_EVENTS);
+export class Events implements OnInit {
+  private eventsService = inject(EventsService);
+
+  events = signal<MmaEvent[]>([]);
+  loading = signal(true);
+  loadError = signal('');
 
   search = signal('');
   selectedOrganization = signal('');
@@ -17,7 +25,9 @@ export class Events {
   sortOrder = signal('asc');
 
   organizations = computed(() => {
-    return [...new Set(this.events().map((event) => event.organization))].sort();
+    const organizations = this.events().map((event) => event.organization);
+
+    return [...new Set(organizations)].sort();
   });
 
   dateRangeError = computed(() => {
@@ -52,7 +62,7 @@ export class Events {
       return matchesText && matchesOrganization && matchesFrom && matchesTo;
     });
 
-    // A filter új tömböt készít, az eredeti sorrend megmarad.
+    // A filter új tömböt készít, így az eredeti sorrend megmarad.
     return result.sort((a, b) => {
       if (this.sortOrder() === 'desc') {
         return b.date.localeCompare(a.date);
@@ -61,6 +71,25 @@ export class Events {
       return a.date.localeCompare(b.date);
     });
   });
+
+  ngOnInit() {
+    this.loadEvents();
+  }
+
+  async loadEvents() {
+    this.loading.set(true);
+    this.loadError.set('');
+
+    try {
+      const events = await firstValueFrom(this.eventsService.getEvents());
+
+      this.events.set(events);
+    } catch {
+      this.loadError.set('Nem sikerült betölteni az eseményeket. Próbáld újra.');
+    } finally {
+      this.loading.set(false);
+    }
+  }
 
   clearFilters() {
     this.search.set('');
