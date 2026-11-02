@@ -1,0 +1,47 @@
+.details-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.details-card {
+  padding: 24px;
+  background-color: white;
+  border: 1px solid #c6cfd8;
+  border-radius: 8px;
+}
+
+.organization {
+  color: #174c91;
+  font-weight: bold;
+}
+
+dt {
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+dd {
+  margin: 4px 0 0;
+}
+
+.demo-note {
+  margin-top: 24px;
+  color: #445367;
+}
+
+.error-box {
+  padding: 20px;
+  background-color: #fff0f0;
+  border-left: 4px solid #a52020;
+}
+
+button {
+  min-height: 44px;
+  padding: 10px 16px;
+}

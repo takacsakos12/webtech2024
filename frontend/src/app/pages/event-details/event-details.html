@@ -1,0 +1,46 @@
+<section class="details-page">
+  <a routerLink="/esemenyek" class="back-link">
+    ← Vissza az eseményekhez
+  </a>
+
+  <h1>Esemény részletei</h1>
+
+  @if (loading()) {
+    <p role="status">Esemény betöltése…</p>
+  } @else if (loadError()) {
+    <div class="error-box">
+      <p role="alert">{{ loadError() }}</p>
+
+      <button type="button" (click)="loadEvent()">
+        Újrapróbálás
+      </button>
+    </div>
+  } @else if (event(); as currentEvent) {
+    <article class="details-card">
+      <p class="organization">
+        {{ currentEvent.organization }}
+      </p>
+
+      <h2>{{ currentEvent.name }}</h2>
+
+      <dl>
+        <dt>Dátum</dt>
+        <dd>
+          <time [attr.datetime]="currentEvent.date">
+            {{ currentEvent.date | date:'yyyy. MM. dd.' }}
+          </time>
+        </dd>
+
+        <dt>Helyszín</dt>
+        <dd>{{ currentEvent.location }}</dd>
+
+        <dt>Szervezet</dt>
+        <dd>{{ currentEvent.organization }}</dd>
+      </dl>
+
+      <p class="demo-note">
+        Bemutatóadatok, nem ellenőrzött versenynaptár.
+      </p>
+    </article>
+  }
+</section>

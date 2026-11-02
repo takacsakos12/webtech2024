@@ -4,10 +4,11 @@ import { DatePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { EventsService } from '../../services/events.service';
 import { MmaEvent } from '../../models/mma-event';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-events',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './events.html',
   styleUrl: './events.css',
 })

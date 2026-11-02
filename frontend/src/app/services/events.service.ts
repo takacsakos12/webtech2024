@@ -12,4 +12,8 @@ export class EventsService {
   getEvents() {
     return this.http.get<MmaEvent[]>('/api/events').pipe(timeout(10000));
   }
+
+  getEventById(id: number) {
+    return this.http.get<MmaEvent>(`/api/events/${id}`).pipe(timeout(10000));
+  }
 }
