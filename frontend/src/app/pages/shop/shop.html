@@ -4,131 +4,190 @@
     <h1>Felszerelések</h1>
 
     <p class="lead">
-      Böngéssz a bemutatókatalógusban, és állítsd össze a kosaradat. Valódi rendelés és fizetés ezen
-      az oldalon nincs.
+      Bemutatókatalógus virtuális raktárral. A bemutatóvásárlás készletet csökkent, valódi fizetés
+      és kiszállítás nélkül. A képek illusztrációk.
+    </p>
+
+    <p class="muted">
+      A kosárba helyezés még nem foglal készletet. A bemutatóraktár szerverújraindításkor visszaáll.
     </p>
   </div>
 
-  <p class="feedback" role="status" aria-live="polite">
-    {{ message() || 'Válassz egy felszerelést a kezdéshez.' }}
-  </p>
+  @if (loading()) {
+    <p role="status">Raktárkészlet betöltése…</p>
+  } @else if (loadError()) {
+    <p role="alert">{{ loadError() }}</p>
 
-  <div class="shop-layout">
-    <section aria-labelledby="catalog-title">
-      <h2 id="catalog-title">Katalógus</h2>
+    <button type="button" (click)="loadProducts()">Újrapróbálás</button>
+  } @else {
+    <p class="feedback" [class.is-error]="isError()" [attr.role]="isError() ? 'alert' : 'status'">
+      {{ message() || 'Válassz egy felszerelést a kezdéshez.' }}
+    </p>
 
-      <div class="search-toolbar">
-        <div>
-          <label for="product-search">Termék keresése</label>
+    <div class="shop-layout">
+      <section aria-labelledby="catalog-title">
+        <h2 id="catalog-title">Katalógus</h2>
 
-          <input
-            id="product-search"
-            type="search"
-            #searchInput
-            [value]="search()"
-            (input)="search.set(searchInput.value)"
-            placeholder="Például: póló vagy felszerelés"
-          />
+        <div class="search-toolbar">
+          <div>
+            <label for="product-search"> Termék vagy cikkszám keresése </label>
+
+            <input
+              id="product-search"
+              type="search"
+              #searchInput
+              [value]="search()"
+              (input)="search.set(searchInput.value)"
+              placeholder="Például: póló vagy MMA-TEE"
+            />
+          </div>
         </div>
-      </div>
 
-      <p class="muted" aria-live="polite">{{ filteredProducts().length }} termék</p>
+        <p class="muted" aria-live="polite">{{ filteredProducts().length }} termék</p>
 
-      <div class="product-grid">
-        @for (product of filteredProducts(); track product.id) {
-          <article class="card product-card">
-            <div class="product-visual" aria-hidden="true">
-              {{ product.visual }}
+        <div class="product-grid">
+          @for (product of filteredProducts(); track product.id) {
+            <article class="card product-card">
+              <img
+                class="product-image"
+                [ngSrc]="product.image"
+                width="1254"
+                height="1254"
+                [alt]="product.name + ' – illusztráció'"
+                [priority]="product.id === 1"
+              />
+
+              <p class="eyebrow">{{ product.category }}</p>
+              <h3>{{ product.name }}</h3>
+
+              <p class="muted">Cikkszám: {{ product.sku }}</p>
+
+              <p class="description muted">
+                {{ product.description }}
+              </p>
+
+              <p class="price">
+                {{ formatPrice(product.price) }}
+              </p>
+
+              <p
+                class="stock"
+                [class.stock-low]="product.stock > 0 && product.stock <= 3"
+                [class.stock-out]="product.stock === 0"
+              >
+                @if (product.stock === 0) {
+                  Elfogyott
+                } @else if (product.stock <= 3) {
+                  Már csak {{ product.stock }} db van raktáron
+                } @else {
+                  Raktáron: {{ product.stock }} db
+                }
+              </p>
+
+              <button
+                type="button"
+                [disabled]="!canAdd(product)"
+                [attr.aria-label]="product.name + ' – ' + addLabel(product)"
+                (click)="add(product.id)"
+              >
+                {{ addLabel(product) }}
+              </button>
+            </article>
+          } @empty {
+            <div class="empty-state">
+              <h3>Nincs találat</h3>
+
+              <button type="button" (click)="search.set('')">Keresés törlése</button>
             </div>
+          }
+        </div>
+      </section>
 
-            <p class="eyebrow">{{ product.category }}</p>
+      <aside class="card" aria-labelledby="cart-title">
+        <h2 id="cart-title">Kosarad · {{ cartIds().length }} db</h2>
+
+        @if (!storageAvailable()) {
+          <p role="alert">A böngésző nem tudja elmenteni a kosarat. Frissítéskor elveszhet.</p>
+        }
+
+        @for (product of cartLines(); track product.id) {
+          <div class="cart-line">
             <h3>{{ product.name }}</h3>
 
-            <p class="description muted">
-              {{ product.description }}
-            </p>
+            <p>{{ formatPrice(product.price) }} / db · Raktáron: {{ product.stock }} db</p>
 
-            <p class="price">{{ formatPrice(product.price) }}</p>
+            @if (product.quantity > product.stock) {
+              <p class="stock-out">Csökkentsd a mennyiséget: nincs elegendő készlet.</p>
+            }
 
-            <button
-              type="button"
-              [attr.aria-label]="product.name + ' kosárba helyezése'"
-              (click)="add(product.id)"
-            >
-              Kosárba +
-            </button>
-          </article>
+            <div class="quantity-controls">
+              <button
+                type="button"
+                [disabled]="!canEdit()"
+                [attr.aria-label]="product.name + ' mennyiségének csökkentése'"
+                (click)="decrease(product.id)"
+              >
+                −
+              </button>
+
+              <span>{{ product.quantity }} db</span>
+
+              <button
+                type="button"
+                [disabled]="!canAdd(product)"
+                [attr.aria-label]="product.name + ' mennyiségének növelése'"
+                (click)="add(product.id)"
+              >
+                +
+              </button>
+
+              <button
+                type="button"
+                [disabled]="!canEdit()"
+                [attr.aria-label]="product.name + ' eltávolítása'"
+                (click)="remove(product.id)"
+              >
+                Eltávolítás
+              </button>
+            </div>
+          </div>
         } @empty {
-          <div class="empty-state">
-            <h3>Nincs találat</h3>
-            <p>Próbálj másik terméknevet vagy kategóriát.</p>
-
-            <button type="button" (click)="search.set('')">Keresés törlése</button>
-          </div>
+          <p class="muted">A kosarad még üres. Válassz terméket a katalógusból.</p>
         }
-      </div>
-    </section>
 
-    <aside class="card" aria-labelledby="cart-title">
-      <h2 id="cart-title">Kosarad · {{ cartIds().length }} db</h2>
-
-      @if (!storageAvailable()) {
-        <p role="alert">
-          A kosarat most nem tudjuk elmenteni ebben a böngészőben. Oldalváltás vagy frissítés után
-          elveszhet.
-        </p>
-      }
-
-      @for (product of cartLines(); track product.id) {
-        <div class="cart-line">
-          <h3>{{ product.name }}</h3>
-
-          <p>{{ formatPrice(product.price) }} / db</p>
-
-          <div class="quantity-controls">
-            <button
-              type="button"
-              [attr.aria-label]="product.name + ' mennyiségének csökkentése'"
-              (click)="decrease(product.id)"
-            >
-              −
-            </button>
-
-            <span>{{ product.quantity }} db</span>
-
-            <button
-              type="button"
-              [attr.aria-label]="product.name + ' mennyiségének növelése'"
-              (click)="add(product.id)"
-            >
-              +
-            </button>
-
-            <button
-              type="button"
-              [attr.aria-label]="product.name + ' eltávolítása'"
-              (click)="remove(product.id)"
-            >
-              Eltávolítás
-            </button>
-          </div>
+        <div class="cart-total">
+          <span>Összesen</span>
+          <strong>{{ formatPrice(total()) }}</strong>
         </div>
-      } @empty {
+
         <p class="muted">
-          A kosarad még üres. A katalógus „Kosárba” gombjaival adhatsz hozzá termékeket.
+          Bemutatóvásárlás: nincs valódi fizetés vagy kiszállítás. A végösszeget és a készletet a
+          szerver ellenőrzi.
         </p>
-      }
 
-      <div class="cart-total">
-        <span>Összesen</span>
-        <strong>{{ formatPrice(total()) }}</strong>
-      </div>
+        <div class="actions">
+          <button
+            type="button"
+            [disabled]="busy() || !cartLines().length || (invalidCart() && !purchaseKey())"
+            (click)="purchase()"
+          >
+            {{
+              busy() ? 'Ellenőrzés…' : purchaseKey() ? 'Vásárlás újrapróbálása' : 'Bemutatóvásárlás'
+            }}
+          </button>
 
-      <p class="muted">Bemutatóárak. A kosár nem jelent leadott rendelést.</p>
+          <button type="button" [disabled]="!canEdit() || !cartIds().length" (click)="clearCart()">
+            Kosár ürítése
+          </button>
+        </div>
 
-      <button type="button" [disabled]="cartIds().length === 0" (click)="clearCart()">
-        Kosár ürítése
-      </button>
-    </aside>
-  </div>
+        @if (purchaseKey() && !busy()) {
+          <p class="muted">
+            A bizonytalan eredmény ellenőrzéséig a kosár nem szerkeszthető. Próbáld újra a
+            vásárlást.
+          </p>
+        }
+      </aside>
+    </div>
+  }
 </section>

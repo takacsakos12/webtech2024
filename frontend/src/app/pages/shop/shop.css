@@ -1,0 +1,32 @@
+.product-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #ece9e5;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.stock {
+  color: #1c5730;
+  font-weight: bold;
+}
+
+.stock-low {
+  color: #874000;
+}
+
+.stock-out,
+.feedback.is-error {
+  color: #8a2020;
+}
+
+.feedback.is-error {
+  background: #fff0f0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

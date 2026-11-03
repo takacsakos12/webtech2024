@@ -1,0 +1,31 @@
+name: mma-shop-db
+
+services:
+  mongo:
+    image: mongo:8.0
+    command:
+      - mongod
+      - --replSet
+      - mma-rs
+      - --bind_ip_all
+      - --port
+      - "27018"
+    ports:
+      - "127.0.0.1:27018:27018"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --port
+        - "27018"
+        - --eval
+        - "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  mongo-data:
