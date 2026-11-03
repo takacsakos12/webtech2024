@@ -1,1 +1,412 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --background: #f4f6f8;
+  --surface: #ffffff;
+  --text: #202a35;
+  --muted: #536174;
+  --border: #d5dce5;
+  --primary: #b94709;
+  --primary-hover: #913707;
+  --accent: #fb923c;
+  --dark: #151b24;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 8px 0 16px;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+a {
+  color: var(--primary);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:hover,
+.button:hover {
+  background: var(--primary-hover);
+}
+
+.button.secondary {
+  background: white;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.button.secondary:hover {
+  background: #e9edf2;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid #7b8a9b;
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+:focus-visible {
+  outline: 3px solid #c2410c;
+  outline-offset: 4px;
+}
+
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.page-heading {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.lead {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgb(21 27 36 / 4%);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-card p {
+  flex: 1;
+  color: var(--muted);
+}
+
+.feature-number {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 56px;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 5vw, 3.8rem);
+}
+
+.hero-art {
+  display: grid;
+  place-content: center;
+  min-height: 320px;
+  padding: 32px;
+  background: var(--dark);
+  color: white;
+  border-radius: 20px;
+  border-bottom: 8px solid var(--accent);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.hero-art span {
+  color: var(--accent);
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.search-toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-toolbar > div {
+  flex: 1;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+}
+
+caption {
+  padding: 16px;
+  text-align: left;
+  color: var(--muted);
+}
+
+th,
+td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: #edf1f5;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.shop-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card .description {
+  flex: 1;
+}
+
+.product-visual {
+  display: grid;
+  place-items: center;
+  min-height: 140px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #151b24, #354254);
+  color: var(--accent);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.price {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.cart-line {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-line h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quantity-controls button {
+  min-width: 44px;
+  padding: 8px;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  font-size: 1.15rem;
+}
+
+.feedback {
+  padding: 12px 16px;
+  background: #eaf5ed;
+  color: #1c5730;
+  border-radius: 8px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 24px;
+  background: #edf1f5;
+  border-radius: 12px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 10;
+  padding: 12px;
+  background: white;
+  color: var(--dark);
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.site-footer {
+  margin-top: 40px;
+  padding: 28px 24px;
+  background: var(--dark);
+  color: #dce3ed;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer small {
+  display: block;
+  margin-top: 8px;
+}
+
+@media (max-width: 850px) {
+  .hero,
+  .shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-art {
+    min-height: 220px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 550px) {
+  .page {
+    padding: 28px 16px;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions .button {
+    width: 100%;
+  }
+}

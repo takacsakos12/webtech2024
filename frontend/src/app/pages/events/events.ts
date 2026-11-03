@@ -1,5 +1,4 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-
 import { DatePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { EventsService } from '../../services/events.service';

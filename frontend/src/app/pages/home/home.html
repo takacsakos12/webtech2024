@@ -1,1 +1,58 @@
-<p>home works!</p>
+<div class="page">
+  <section class="hero" aria-labelledby="home-title">
+    <div>
+      <p class="eyebrow">MMA Magyarország</p>
+
+      <h1 id="home-title">Közelebb a küzdősportok világához.</h1>
+
+      <p class="lead">
+        Fedezd fel a bajnokokat, böngéssz az események között, és találd meg a következő kedvenc
+        felszerelésed.
+      </p>
+
+      <div class="actions">
+        <a class="button" routerLink="/esemenyek"> Események felfedezése → </a>
+
+        <a class="button secondary" routerLink="/bajnokok"> Bajnokok megtekintése </a>
+        <a class="button secondary" routerLink="/webshop"> Webshop megnyitása → </a>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      FIGHT.<br />
+      TRAIN.<br />
+      <span>REPEAT.</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="explore-title">
+    <div class="section-heading">
+      <p class="eyebrow">Fedezd fel</p>
+      <h2 id="explore-title">Minden egy helyen.</h2>
+      <p class="muted">Válassz témát, és merülj el az MMA világában.</p>
+    </div>
+
+    <div class="feature-grid">
+      <article class="card feature-card">
+        <span class="feature-number">01 / BAJNOKOK</span>
+        <h3>A súlycsoportok élén</h3>
+        <p>Tekintsd át a bajnoklistát, és keress név, súlycsoport vagy szervezet szerint.</p>
+        <a routerLink="/bajnokok"> Bajnoklista megnyitása → </a>
+      </article>
+
+      <article class="card feature-card">
+        <span class="feature-number">02 / ESEMÉNYEK</span>
+        <h3>Találd meg a következő eseményt</h3>
+        <p>Keress helyszínre, válassz szervezetet, és szűkítsd a listát dátum alapján.</p>
+        <a routerLink="/esemenyek"> Eseménykereső megnyitása → </a>
+      </article>
+
+      <article class="card feature-card">
+        <span class="feature-number">03 / FELSZERELÉSEK</span>
+        <h3>Készülj a következő edzésre</h3>
+        <p>Böngészd a bemutatókatalógust, és próbáld ki a felszerelések kosárba helyezését.</p>
+        <a routerLink="/webshop"> Webshop megnyitása → </a>
+      </article>
+    </div>
+  </section>
+</div>
