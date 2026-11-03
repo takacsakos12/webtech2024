@@ -1,24 +1,35 @@
-import { Router } from 'express';
-import { DEMO_EVENTS } from '../data/events.data.js';
+import { Router } from "express";
+import { EventModel } from "../models/event.model.js";
 
 export const eventsRouter = Router();
 
-eventsRouter.get('/', (_req, res) => {
-  res.json(DEMO_EVENTS);
+eventsRouter.get("/", async (_req, res) => {
+  const events = await EventModel.find()
+    .select("-_id -__v -createdAt -updatedAt")
+    .sort({ date: 1, id: 1 })
+    .lean();
+
+  res.json(events);
 });
 
-eventsRouter.get('/:id', (req, res) => {
+eventsRouter.get("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  if(!Number.isInteger(id) || id < 1) {
-    res.status(400).json({ error: 'Invalid event ID' });
+  if (!Number.isSafeInteger(id) || id < 1) {
+    res.status(400).json({
+      message: "Érvénytelen eseményazonosító.",
+    });
     return;
   }
 
-  const event = DEMO_EVENTS.find(event => event.id === id);
+  const event = await EventModel.findOne({ id })
+    .select("-_id -__v -createdAt -updatedAt")
+    .lean();
 
   if (!event) {
-    res.status(404).json({ error: 'Event not found' });
+    res.status(404).json({
+      message: "Ez az esemény nem található.",
+    });
     return;
   }
 

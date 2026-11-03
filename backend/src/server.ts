@@ -1,11 +1,19 @@
-import { app } from './app.js';
-import 'dotenv/config';
-import { connectDatabase } from './config/db.js';
-import mongoose from 'mongoose';
-
+import { app } from "./app.js";
+import "dotenv/config";
+import { connectDatabase } from "./config/db.js";
+import mongoose from "mongoose";
+import { OrderModel } from "./models/order.model.js";
+import { ProductModel } from "./models/product.model.js";
+import { EventModel } from "./models/event.model.js";
 
 async function startServer() {
   await connectDatabase();
+
+  await Promise.all([
+    ProductModel.init(),
+    EventModel.init(),
+    OrderModel.init(),
+  ]);
 
   const port = Number(process.env.PORT) || 3001;
 
@@ -14,12 +22,10 @@ async function startServer() {
   });
 }
 
-startServer().catch(async error => {
+startServer().catch(async (error) => {
   console.error(
-    'A backend nem indult el:',
-    error instanceof Error
-      ? error.message
-      : 'Ismeretlen hiba.'
+    "A backend nem indult el:",
+    error instanceof Error ? error.message : "Ismeretlen hiba.",
   );
 
   await mongoose.disconnect();
