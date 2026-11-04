@@ -1,48 +1,307 @@
+:host {
+  display: block;
+  color: #172033;
+}
+
+.details-page,
+.details-page * {
+  box-sizing: border-box;
+}
+
 .details-page {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 32px 24px 64px;
 }
 
 .back-link {
-  display: inline-block;
-  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 20px;
+  color: #174c91;
+  font-weight: 600;
+  text-underline-offset: 4px;
 }
 
-.details-card {
-  padding: 24px;
-  background-color: white;
-  border: 1px solid #c6cfd8;
-  border-radius: 8px;
+.event-header {
+  padding: 32px;
+  border-radius: 16px;
+  background: #0f172a;
+  color: #fff;
 }
 
 .organization {
-  color: #174c91;
-  font-weight: bold;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #f97316;
+  color: #172033;
+  font-weight: 800;
 }
 
-dt {
-  margin-top: 16px;
-  font-weight: bold;
+h1 {
+  margin: 18px 0;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 
-dd {
-  margin: 4px 0 0;
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 48px;
+  margin: 24px 0 0;
+}
+
+.event-meta dt {
+  margin-bottom: 6px;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.event-meta dd {
+  margin: 0;
+  font-weight: 600;
 }
 
 .demo-note {
-  margin-top: 24px;
-  color: #445367;
+  margin: 20px 0 32px;
+  padding: 14px 18px;
+  border-left: 4px solid #c2410c;
+  border-radius: 4px;
+  background: #fff7ed;
+  color: #7c2d12;
+  line-height: 1.6;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0;
+}
+
+.section-heading span {
+  color: #475569;
+}
+
+.fight-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.fight-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-top: 4px solid #64748b;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgb(15 23 42 / 5%);
+}
+
+.fight-card.main-event {
+  border-top-color: #f97316;
+}
+
+.fight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.fight-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cancelled .status {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.matchup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 28px 20px;
+}
+
+.fighter {
+  min-width: 0;
+  text-align: center;
+}
+
+.fighter img {
+  display: block;
+  width: 112px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0 auto 16px;
+  border: 3px solid #cbd5e1;
+  border-radius: 50%;
+  background: #f1f5f9;
+  object-fit: cover;
+}
+
+.red-corner img {
+  border-color: #b91c1c;
+}
+
+.blue-corner img {
+  border-color: #1d4ed8;
+}
+
+.fighter-name {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.nickname,
+.country {
+  margin: 8px 0 0;
+  color: #475569;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.record {
+  margin: 12px 0 0;
+  font-weight: 700;
+}
+
+.versus {
+  color: #64748b;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.fight-footer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.fight-result {
+  padding: 16px 20px;
+  border-top: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+  text-align: center;
+}
+
+.fight-result p {
+  margin: 4px 0;
+}
+
+.notice,
+.error-box {
+  padding: 24px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
 }
 
 .error-box {
-  padding: 20px;
-  background-color: #fff0f0;
-  border-left: 4px solid #a52020;
+  border-color: #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
 }
 
-button {
+.error-box button {
   min-height: 44px;
-  padding: 10px 16px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.missing-fighter {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+@media (max-width: 1000px) {
+  .fight-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-page {
+    padding: 20px 12px 40px;
+  }
+
+  .event-header {
+    padding: 24px 20px;
+  }
+
+  .matchup {
+    gap: 8px;
+    padding: 24px 12px;
+  }
+
+  .fighter img {
+    width: 80px;
+  }
+
+  .fighter-name {
+    font-size: 1rem;
+  }
+
+  .versus {
+    font-size: 1rem;
+  }
+}
+
+.title-fight-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #b8860b;
+  border-radius: 20px;
+  background: #fff8db;
+  color: #705000;
+  font-size: 0.85rem;
+  font-weight: bold;
 }

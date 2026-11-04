@@ -99,6 +99,16 @@ async function seed() {
       });
 
       if (exists) {
+        await FightModel.updateOne(
+          { id: fight.id },
+          {
+            $set: {
+              isTitleFight: fight.isTitleFight,
+            },
+          },
+          { runValidators: true },
+        );
+
         continue;
       }
 

@@ -147,4 +147,18 @@ export const DEMO_EVENTS: MmaEvent[] = [
     location: "Pozsony, Szlovákia",
     organization: "OKTAGON",
   },
+  {
+    id: 21,
+    name: "PFL – Lyon Demo Night",
+    date: "2027-04-10",
+    location: "Lyon, Franciaország",
+    organization: "PFL",
+  },
+  {
+    id: 22,
+    name: "KSW – Warsaw Demo Night",
+    date: "2027-04-24",
+    location: "Varsó, Lengyelország",
+    organization: "KSW",
+  },
 ];

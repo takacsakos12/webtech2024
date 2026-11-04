@@ -1,19 +1,15 @@
-<section class="details-page">
-  <a routerLink="/esemenyek" class="back-link">
-    ← Vissza az eseményekhez
-  </a>
+<section class="details-page" [attr.aria-busy]="loading()">
+  <a routerLink="/esemenyek" class="back-link"> ← Vissza az eseményekhez </a>
 
   <h1>Esemény részletei</h1>
 
   @if (loading()) {
-    <p role="status">Esemény betöltése…</p>
+    <p role="status">Esemény és párosítások betöltése…</p>
   } @else if (loadError()) {
     <div class="error-box">
       <p role="alert">{{ loadError() }}</p>
 
-      <button type="button" (click)="loadEvent()">
-        Újrapróbálás
-      </button>
+      <button type="button" (click)="loadEvent()">Újrapróbálás</button>
     </div>
   } @else if (event(); as currentEvent) {
     <article class="details-card">
@@ -27,7 +23,7 @@
         <dt>Dátum</dt>
         <dd>
           <time [attr.datetime]="currentEvent.date">
-            {{ currentEvent.date | date:'yyyy. MM. dd.' }}
+            {{ currentEvent.date | date: 'yyyy. MM. dd.' }}
           </time>
         </dd>
 
@@ -39,8 +35,133 @@
       </dl>
 
       <p class="demo-note">
-        Bemutatóadatok, nem ellenőrzött versenynaptár.
+        Bemutatóadatok, nem ellenőrzött versenynaptár vagy hivatalos nevezési lista.
       </p>
     </article>
+
+    <section class="fights-section" aria-labelledby="fights-heading">
+      <div class="fights-heading">
+        <h2 id="fights-heading">Párosítások</h2>
+        <span>{{ currentEvent.fights.length }} mérkőzés</span>
+      </div>
+
+      @if (currentEvent.fights.length === 0) {
+        <p class="empty-state">Ehhez az eseményhez még nincs rögzített mérkőzés.</p>
+      } @else {
+        <div class="fight-grid">
+          @for (fight of currentEvent.fights; track fight.id) {
+            <article
+              class="fight-card"
+              [class.main-event]="fight.isMainEvent"
+              [attr.aria-labelledby]="'fight-' + fight.id"
+            >
+              <header class="fight-header">
+                <h3 [id]="'fight-' + fight.id">
+                  @if (fight.isMainEvent) {
+                    Főmérkőzés
+                  } @else {
+                    {{ fight.cardOrder }}. mérkőzés
+                  }
+                </h3>
+
+                @if (fight.isTitleFight) {
+                  <span class="title-fight-badge"> Bajnoki mérkőzés </span>
+                }
+
+                <span class="fight-status" [class.cancelled]="fight.status === 'cancelled'">
+                  {{ statusLabel(fight.status) }}
+                </span>
+              </header>
+
+              <div class="matchup">
+                <div class="fighter red-corner">
+                  @if (fight.redCorner; as fighter) {
+                    <img
+                      [src]="fighter.image || '/images/fighters/placeholder.svg'"
+                      alt=""
+                      width="100"
+                      height="100"
+                      loading="lazy"
+                      (error)="onImageError($event)"
+                    />
+
+                    <p class="fighter-name">
+                      {{ fighter.name }}
+                    </p>
+
+                    @if (fighter.nickname) {
+                      <p class="fighter-nickname">„{{ fighter.nickname }}”</p>
+                    }
+
+                    <p class="fighter-country">
+                      {{ fighter.country }}
+                    </p>
+
+                    <p class="fighter-record">
+                      {{ fighterRecord(fighter) }}
+                    </p>
+                  } @else {
+                    <p class="missing-fighter">A piros sarok harcosának adatai nem elérhetők.</p>
+                  }
+                </div>
+
+                <span class="versus" aria-label="ellen"> VS </span>
+
+                <div class="fighter blue-corner">
+                  @if (fight.blueCorner; as fighter) {
+                    <img
+                      [src]="fighter.image || '/images/fighters/placeholder.svg'"
+                      alt=""
+                      width="100"
+                      height="100"
+                      loading="lazy"
+                      (error)="onImageError($event)"
+                    />
+
+                    <p class="fighter-name">
+                      {{ fighter.name }}
+                    </p>
+
+                    @if (fighter.nickname) {
+                      <p class="fighter-nickname">„{{ fighter.nickname }}”</p>
+                    }
+
+                    <p class="fighter-country">
+                      {{ fighter.country }}
+                    </p>
+
+                    <p class="fighter-record">
+                      {{ fighterRecord(fighter) }}
+                    </p>
+                  } @else {
+                    <p class="missing-fighter">A kék sarok harcosának adatai nem elérhetők.</p>
+                  }
+                </div>
+              </div>
+
+              <footer class="fight-footer">
+                <span>{{ fight.weightClass }}</span>
+                <span> {{ fight.scheduledRounds }} tervezett menet </span>
+              </footer>
+
+              @if (fight.status === 'completed') {
+                @if (fight.result; as result) {
+                  <div class="fight-result">
+                    <p>
+                      <strong>{{ resultLabel(fight) }}</strong>
+                    </p>
+
+                    <p>
+                      {{ result.method }} · {{ result.round }}. menet ·
+                      {{ result.time }}
+                    </p>
+                  </div>
+                }
+              }
+            </article>
+          }
+        </div>
+      }
+    </section>
   }
 </section>

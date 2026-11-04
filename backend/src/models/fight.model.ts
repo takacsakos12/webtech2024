@@ -86,6 +86,12 @@ const fightSchema = new Schema(
       default: false,
     },
 
+    isTitleFight: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
     status: {
       type: String,
       required: true,
