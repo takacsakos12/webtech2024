@@ -6,10 +6,11 @@ import { firstValueFrom } from 'rxjs';
 
 import { Product } from '../../models/product';
 import { ProductsService } from '../../services/products.service';
+import { OrderSummary } from './order-summary';
 
 @Component({
   selector: 'app-shop',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, OrderSummary],
   templateUrl: './shop.html',
   styleUrl: './shop.css',
 })
@@ -28,6 +29,7 @@ export class Shop implements OnInit {
   loadError = signal('');
   busy = signal(false);
   purchaseKey = signal<string | null>(null);
+  checkoutOpen = signal(false);
 
   filteredProducts = computed(() => {
     const query = this.search().trim().toLocaleLowerCase('hu');
@@ -36,6 +38,20 @@ export class Shop implements OnInit {
       `${product.name} ${product.category} ${product.sku}`.toLocaleLowerCase('hu').includes(query),
     );
   });
+
+  openCheckout() {
+    if (this.busy() || !this.cartLines().length) return;
+
+    this.message.set('');
+    this.isError.set(false);
+    this.checkoutOpen.set(true);
+  }
+
+  closeCheckout() {
+    if (this.busy()) return;
+
+    this.checkoutOpen.set(false);
+  }
 
   cartLines = computed(() =>
     this.products()
@@ -189,6 +205,8 @@ export class Shop implements OnInit {
       this.cartIds.set([]);
       this.purchaseKey.set(null);
       this.saveCart();
+
+      this.checkoutOpen.set(false);
 
       this.notify(
         `Sikeres bemutatóvásárlás: ${this.formatPrice(result.total)}. ` +

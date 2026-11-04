@@ -9,7 +9,8 @@
     </p>
 
     <p class="muted">
-      A kosárba helyezés még nem foglal készletet. A bemutatóraktár szerverújraindításkor visszaáll.
+      A kosárba helyezés még nem foglal készletet. A készletet a rendelés véglegesítésekor
+      ellenőrizzük.
     </p>
   </div>
 
@@ -166,14 +167,8 @@
         </p>
 
         <div class="actions">
-          <button
-            type="button"
-            [disabled]="busy() || !cartLines().length || (invalidCart() && !purchaseKey())"
-            (click)="purchase()"
-          >
-            {{
-              busy() ? 'Ellenőrzés…' : purchaseKey() ? 'Vásárlás újrapróbálása' : 'Bemutatóvásárlás'
-            }}
+          <button type="button" [disabled]="busy() || !cartLines().length" (click)="openCheckout()">
+            {{ purchaseKey() ? 'Rendelés ellenőrzése' : 'Tovább a rendeléshez' }}
           </button>
 
           <button type="button" [disabled]="!canEdit() || !cartIds().length" (click)="clearCart()">
@@ -191,3 +186,16 @@
     </div>
   }
 </section>
+
+@if (checkoutOpen()) {
+  <app-order-summary
+    [items]="cartLines()"
+    [total]="total()"
+    [busy]="busy()"
+    [invalid]="invalidCart()"
+    [retry]="purchaseKey() !== null"
+    [errorMessage]="isError() ? message() : ''"
+    (confirmed)="purchase()"
+    (closed)="closeCheckout()"
+  />
+}
