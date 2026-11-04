@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import { OrderModel } from "./models/order.model.js";
 import { ProductModel } from "./models/product.model.js";
 import { EventModel } from "./models/event.model.js";
+import { FighterModel } from './models/fighter.model.js';
+import { FightModel } from './models/fight.model.js';
 
 async function startServer() {
   await connectDatabase();
@@ -12,6 +14,8 @@ async function startServer() {
   await Promise.all([
     ProductModel.init(),
     EventModel.init(),
+    FighterModel.init(),
+    FightModel.init(),
     OrderModel.init(),
   ]);
 

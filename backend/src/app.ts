@@ -4,7 +4,7 @@ import type { Request, Response, NextFunction } from "express";
 import { eventsRouter } from "./routes/events.route.js";
 import { productsRouter } from "./routes/products.route.js";
 import { PurchaseError } from "./services/purchase.service.js";
-
+import { fightersRouter } from "./routes/fighters.route.js";
 export const app = express();
 
 app.use(express.json());
@@ -15,6 +15,7 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/events", eventsRouter);
 app.use("/api/products", productsRouter);
+app.use("/api/fighters", fightersRouter);
 
 app.use((_req, res) => {
   res.status(404).json({
