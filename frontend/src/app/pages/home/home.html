@@ -1,57 +1,149 @@
-<div class="page">
-  <section class="hero" aria-labelledby="home-title">
-    <div>
+<div class="page home-page">
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="home-intro">
       <p class="eyebrow">MMA Magyarország</p>
 
-      <h1 id="home-title">Közelebb a küzdősportok világához.</h1>
+      <h1 id="home-title">
+        A következő menet<br />
+        <span>itt kezdődik.</span>
+      </h1>
 
       <p class="lead">
-        Fedezd fel a bajnokokat, böngéssz az események között, és találd meg a következő kedvenc
-        felszerelésed.
+        Események, párosítások és harcosprofilok egy helyen. Fedezd fel a küzdősportok világát!
       </p>
 
       <div class="actions">
-        <a class="button" routerLink="/esemenyek"> Események felfedezése → </a>
+        <a class="button" routerLink="/esemenyek"> Események böngészése → </a>
 
-        <a class="button secondary" routerLink="/bajnokok"> Bajnokok megtekintése </a>
-        <a class="button secondary" routerLink="/webshop"> Webshop megnyitása → </a>
+        <a class="button secondary" routerLink="/bajnokok"> Bajnokok </a>
+      </div>
+
+      <p class="home-note">Bemutatóprojekt · A párosítások nem hivatalos nevezések.</p>
+    </div>
+
+    <aside class="featured-event" aria-labelledby="featured-title">
+      <p class="featured-label" id="featured-title">Következő a bemutatónaptárban</p>
+
+      @if (loading()) {
+        <p role="status">Esemény betöltése…</p>
+      } @else if (featured(); as event) {
+        <span class="featured-organization">
+          {{ event.organization }}
+        </span>
+
+        <h2>{{ event.name }}</h2>
+
+        <p>{{ event.location }}</p>
+
+        <time [attr.datetime]="event.date">
+          {{ event.date | date: 'yyyy. MM. dd.' }}
+        </time>
+
+        <a class="button" [routerLink]="['/esemenyek', event.id]"> Párosítások megtekintése → </a>
+      } @else {
+        <h2>Fedezd fel az eseményeket!</h2>
+
+        <p>
+          {{
+            error()
+              ? 'A kiemelt esemény jelenleg nem elérhető.'
+              : 'Még nincs közelgő esemény a naptárban.'
+          }}
+        </p>
+
+        <a class="button" routerLink="/esemenyek"> Teljes eseménylista → </a>
+      }
+    </aside>
+  </section>
+
+  <section class="home-section" aria-labelledby="upcoming-title">
+    <div class="home-section-heading">
+      <div>
+        <p class="eyebrow">Versenynaptár</p>
+        <h2 id="upcoming-title">Közelgő események</h2>
+      </div>
+
+      <a routerLink="/esemenyek">Összes esemény →</a>
+    </div>
+
+    @if (loading()) {
+      <p role="status">Eseménylista betöltése…</p>
+    } @else if (error()) {
+      <div class="home-feedback">
+        <p role="alert">{{ error() }}</p>
+
+        <button type="button" (click)="loadEvents()">Újrapróbálás</button>
+      </div>
+    } @else {
+      <div class="home-events">
+        @for (event of upcoming(); track event.id) {
+          <article class="card home-event-card">
+            <p class="eyebrow">{{ event.organization }}</p>
+
+            <h3>
+              <a [routerLink]="['/esemenyek', event.id]">
+                {{ event.name }}
+              </a>
+            </h3>
+
+            <p class="muted">{{ event.location }}</p>
+
+            <time [attr.datetime]="event.date">
+              {{ event.date | date: 'yyyy. MM. dd.' }}
+            </time>
+
+            <a class="event-card-link" [routerLink]="['/esemenyek', event.id]">
+              Részletek és párosítások →
+            </a>
+          </article>
+        } @empty {
+          <p class="empty-state">
+            Jelenleg nincs közelgő esemény. A teljes listában a korábbi eseményeket is megtalálod.
+          </p>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="home-section" aria-labelledby="explore-title">
+    <div class="home-section-heading">
+      <div>
+        <p class="eyebrow">Fedezd fel</p>
+        <h2 id="explore-title">A ketrecen innen és túl</h2>
       </div>
     </div>
 
-    <div class="hero-art" aria-hidden="true">
-      FIGHT.<br />
-      TRAIN.<br />
-      <span>REPEAT.</span>
-    </div>
-  </section>
+    <div class="home-explore">
+      <article class="card">
+        <span class="explore-number" aria-hidden="true"> 01 </span>
 
-  <section aria-labelledby="explore-title">
-    <div class="section-heading">
-      <p class="eyebrow">Fedezd fel</p>
-      <h2 id="explore-title">Minden egy helyen.</h2>
-      <p class="muted">Válassz témát, és merülj el az MMA világában.</p>
-    </div>
-
-    <div class="feature-grid">
-      <article class="card feature-card">
-        <span class="feature-number">01 / BAJNOKOK</span>
         <h3>A súlycsoportok élén</h3>
-        <p>Tekintsd át a bajnoklistát, és keress név, súlycsoport vagy szervezet szerint.</p>
-        <a routerLink="/bajnokok"> Bajnoklista megnyitása → </a>
+
+        <p class="muted">Böngészd a bajnoklistát, és keress versenyzőre vagy súlycsoportra.</p>
+
+        <a routerLink="/bajnokok">Bajnoklista →</a>
       </article>
 
-      <article class="card feature-card">
-        <span class="feature-number">02 / ESEMÉNYEK</span>
-        <h3>Találd meg a következő eseményt</h3>
-        <p>Keress helyszínre, válassz szervezetet, és szűkítsd a listát dátum alapján.</p>
-        <a routerLink="/esemenyek"> Eseménykereső megnyitása → </a>
+      <article class="card">
+        <span class="explore-number" aria-hidden="true"> 02 </span>
+
+        <h3>Ismerd meg a párosításokat</h3>
+
+        <p class="muted">
+          Az eseményekről a meccsek adatlapjára és a harcosok profiljára is továbbléphetsz.
+        </p>
+
+        <a routerLink="/esemenyek"> Események és meccsek → </a>
       </article>
 
-      <article class="card feature-card">
-        <span class="feature-number">03 / FELSZERELÉSEK</span>
-        <h3>Készülj a következő edzésre</h3>
-        <p>Böngészd a bemutatókatalógust, és próbáld ki a felszerelések kosárba helyezését.</p>
-        <a routerLink="/webshop"> Webshop megnyitása → </a>
+      <article class="card shop-promo">
+        <span class="explore-number" aria-hidden="true"> 03 </span>
+
+        <h3>Készülj az edzésre</h3>
+
+        <p class="muted">Felszerelések, védők és ruházat a bemutató webshopban.</p>
+
+        <a routerLink="/webshop">Webshop megnyitása →</a>
       </article>
     </div>
   </section>

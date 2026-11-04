@@ -1,17 +1,21 @@
-<section class="page">
-  <div class="page-heading">
-    <p class="eyebrow">A súlycsoportok élén</p>
-    <h1>Férfi UFC-bajnokok</h1>
+<section class="page champions-page">
+  <header class="champions-heading">
+    <div>
+      <p class="eyebrow">A súlycsoportok élén</p>
+      <h1>Férfi UFC-bajnokok</h1>
 
-    <p class="lead">Keress a listában név, súlycsoport vagy szervezet alapján.</p>
+      <p class="lead">Nyolc súlycsoport, nyolc név. Keresd meg a téged érdeklő versenyzőt.</p>
+    </div>
 
-    <p class="muted">
-      Ellenőrizve: {{ lastChecked }} ·
-      <a href="https://www.ufc.com/rankings"> UFC hivatalos ranglista </a>
-    </p>
-  </div>
+    <div class="champions-source">
+      <span>Lista ellenőrzési dátuma</span>
+      <strong>{{ lastChecked }}</strong>
 
-  <div class="search-toolbar">
+      <a href="https://www.ufc.com/rankings"> UFC hivatalos ranglista → </a>
+    </div>
+  </header>
+
+  <div class="champions-search">
     <div>
       <label for="champion-search"> Keresés a bajnokok között </label>
 
@@ -19,49 +23,77 @@
         id="champion-search"
         type="search"
         [(ngModel)]="search"
-        placeholder="Például: Islam vagy légsúly"
+        placeholder="Név, súlycsoport vagy szervezet"
       />
     </div>
 
     <button type="button" [disabled]="search === ''" (click)="search = ''">Keresés törlése</button>
   </div>
 
-  <p role="status" aria-live="polite">
-    Találatok: {{ filteredChampions.length }} / {{ champions.length }}
+  <p class="muted champions-count" role="status" aria-live="polite">
+    {{ filteredChampions.length }} találat / {{ champions.length }} versenyző
   </p>
 
-  <div
-    class="table-wrap"
-    role="region"
-    aria-label="Bajnoklista, keskeny képernyőn vízszintesen görgethető"
-    tabindex="0"
-  >
-    <table>
-      <caption>
-        Versenyzők súlycsoport és szervezet szerint
-      </caption>
+  <div class="champions-grid">
+    @for (champion of filteredChampions; track champion.id) {
+      <article class="champion-card">
+        <div class="champion-photo">
+          <span class="champion-portrait-initial" aria-hidden="true">
+            {{ champion.name.slice(0, 1) }}
+          </span>
 
-      <thead>
-        <tr>
-          <th scope="col">Versenyző</th>
-          <th scope="col">Súlycsoport</th>
-          <th scope="col">Szervezet</th>
-        </tr>
-      </thead>
+          @if (championImages[champion.id]; as photo) {
+            <img
+              [ngSrc]="photo.src"
+              alt=""
+              fill
+              sizes="(max-width: 500px) 100vw,
+               (max-width: 1100px) 50vw,
+               25vw"
+              loading="lazy"
+              (error)="hideBrokenImage($event)"
+            />
+          }
 
-      <tbody>
-        @for (champion of filteredChampions; track champion.id) {
-          <tr>
-            <td>{{ champion.name }}</td>
-            <td>{{ champion.weightClass }}</td>
-            <td>{{ champion.organization }}</td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="3">Nincs a keresésnek megfelelő versenyző. Próbálj másik kifejezést.</td>
-          </tr>
+          <span class="champion-photo-badge">
+            {{ champion.organization }}
+          </span>
+        </div>
+
+        <div class="champion-card-body">
+          <p class="champion-division">
+            {{ champion.weightClass }}
+          </p>
+
+          <h2>{{ champion.name }}</h2>
+        </div>
+
+        <div class="champion-card-footer">
+          <span>Súlycsoport bajnoka</span>
+          <span class="champion-mark" aria-hidden="true">★</span>
+        </div>
+
+        @if (championImages[champion.id]; as photo) {
+          <p class="champion-photo-credit">
+            Fotó: {{ photo.author }} ·
+
+            <a [href]="photo.source">Forrás</a>
+            ·
+            <a [href]="photo.licenseUrl">
+              {{ photo.license }}
+            </a>
+
+            <span>Kivágott megjelenítés.</span>
+          </p>
         }
-      </tbody>
-    </table>
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <h2>Nincs megfelelő találat</h2>
+        <p>Próbálj másik nevet vagy súlycsoportot.</p>
+
+        <button type="button" (click)="search = ''">Összes bajnok mutatása</button>
+      </div>
+    }
   </div>
 </section>

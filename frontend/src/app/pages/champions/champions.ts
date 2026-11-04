@@ -1,13 +1,22 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgOptimizedImage } from '@angular/common';
+import { CHAMPION_IMAGES } from './champions.images';
 
 @Component({
   selector: 'app-champions',
-  imports: [FormsModule],
+  imports: [FormsModule, NgOptimizedImage],
   templateUrl: './champions.html',
   styleUrl: './champions.css',
 })
 export class Champions {
+  championImages = CHAMPION_IMAGES;
+
+  hideBrokenImage(event: Event) {
+    const image = event.target as HTMLImageElement;
+    image.hidden = true;
+  }
+
   champions = [
     {
       id: 1,

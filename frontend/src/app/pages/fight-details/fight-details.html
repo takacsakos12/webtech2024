@@ -1,0 +1,109 @@
+@let state = page.state();
+
+<section class="page sports-details" [attr.aria-busy]="state.loading">
+  <a routerLink="/esemenyek">← Események</a>
+
+  <h1>Mérkőzés részletei</h1>
+
+  @if (state.loading) {
+    <p role="status">Mérkőzés betöltése…</p>
+  } @else if (state.error) {
+    <div class="card">
+      <p role="alert">{{ state.error }}</p>
+
+      <button type="button" (click)="page.reload()">Újrapróbálás</button>
+    </div>
+  } @else if (state.data; as fight) {
+    <article class="card">
+      @if (fight.event; as event) {
+        <p>
+          <a [routerLink]="['/esemenyek', event.id]"> ← {{ event.name }} </a>
+        </p>
+
+        <p class="muted">
+          {{ event.date | date: 'yyyy. MM. dd.' }} ·
+          {{ event.location }}
+        </p>
+      } @else {
+        <p class="muted">Az esemény adatai nem elérhetők.</p>
+      }
+
+      <div class="sports-matchup">
+        <div>
+          <p class="eyebrow">Piros sarok</p>
+
+          @if (fight.redCorner; as fighter) {
+            <h2>
+              <a [routerLink]="['/harcosok', fighter.id]">
+                {{ fighter.name }}
+              </a>
+            </h2>
+
+            <p>{{ fighter.country }}</p>
+          } @else {
+            <p>A harcos adatai nem elérhetők.</p>
+          }
+        </div>
+
+        <strong aria-label="ellen">VS</strong>
+
+        <div>
+          <p class="eyebrow">Kék sarok</p>
+
+          @if (fight.blueCorner; as fighter) {
+            <h2>
+              <a [routerLink]="['/harcosok', fighter.id]">
+                {{ fighter.name }}
+              </a>
+            </h2>
+
+            <p>{{ fighter.country }}</p>
+          } @else {
+            <p>A harcos adatai nem elérhetők.</p>
+          }
+        </div>
+      </div>
+
+      <dl class="athlete-facts">
+        <div>
+          <dt>Súlycsoport</dt>
+          <dd>{{ fight.weightClass }}</dd>
+        </div>
+
+        <div>
+          <dt>Tervezett menetek</dt>
+          <dd>{{ fight.scheduledRounds }}</dd>
+        </div>
+
+        <div>
+          <dt>Állapot</dt>
+          <dd>{{ statusLabel(fight.status) }}</dd>
+        </div>
+
+        <div>
+          <dt>Bajnoki mérkőzés</dt>
+          <dd>{{ fight.isTitleFight ? 'Igen' : 'Nem' }}</dd>
+        </div>
+      </dl>
+
+      @if (fight.isMainEvent) {
+        <p class="sports-badge">Főmérkőzés</p>
+      }
+
+      @if (fight.status === 'completed') {
+        <h2>Eredmény</h2>
+
+        <p>{{ resultLabel(fight) }}</p>
+
+        @if (fight.result; as result) {
+          <p>
+            {{ result.method }} · {{ result.round }}. menet ·
+            {{ result.time }}
+          </p>
+        }
+      }
+
+      <p class="muted">Bemutatóadatok, nem hivatalos versenyprogram.</p>
+    </article>
+  }
+</section>

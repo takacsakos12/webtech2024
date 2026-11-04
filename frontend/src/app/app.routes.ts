@@ -21,12 +21,25 @@ export const routes: Routes = [
     path: 'webshop',
     component: Shop,
   },
-
   {
     path: 'esemenyek/:id',
     title: 'Esemény részletei – MMA Magyarország',
     loadComponent: () =>
       import('./pages/event-details/event-details').then((component) => component.EventDetails),
+  },
+  {
+    path: 'harcosok/:id',
+    title: 'Harcosprofil – MMA Magyarország',
+    loadComponent: () =>
+      import('./pages/fighter-details/fighter-details').then(
+        (component) => component.FighterDetails,
+      ),
+  },
+  {
+    path: 'meccsek/:id',
+    title: 'Mérkőzés – MMA Magyarország',
+    loadComponent: () =>
+      import('./pages/fight-details/fight-details').then((component) => component.FightDetails),
   },
   { path: '**', redirectTo: '' },
 ];

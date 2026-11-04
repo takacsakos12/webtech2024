@@ -1,0 +1,122 @@
+@let state = page.state();
+
+<section class="page sports-details" [attr.aria-busy]="state.loading">
+  <a routerLink="/esemenyek">← Események</a>
+
+  <h1>Harcosprofil</h1>
+
+  @if (state.loading) {
+    <p role="status">Profil betöltése…</p>
+  } @else if (state.error) {
+    <div class="card">
+      <p role="alert">{{ state.error }}</p>
+
+      <button type="button" (click)="page.reload()">Újrapróbálás</button>
+    </div>
+  } @else if (state.data; as profile) {
+    <article class="card athlete-profile">
+      <img
+        [src]="profile.fighter.image || '/images/fighters/placeholder.svg'"
+        alt=""
+        width="160"
+        height="160"
+        (error)="onImageError($event)"
+      />
+
+      <div>
+        <p class="eyebrow">
+          {{ profile.fighter.organization }}
+        </p>
+
+        <h2>{{ profile.fighter.name }}</h2>
+
+        @if (profile.fighter.nickname) {
+          <p>„{{ profile.fighter.nickname }}”</p>
+        }
+
+        <dl class="athlete-facts">
+          <div>
+            <dt>Ország</dt>
+            <dd>{{ profile.fighter.country }}</dd>
+          </div>
+
+          <div>
+            <dt>Születési dátum</dt>
+            <dd>
+              {{ profile.fighter.birthDate | date: 'yyyy. MM. dd.' }}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Súlycsoport</dt>
+            <dd>{{ profile.fighter.weightClass }}</dd>
+          </div>
+
+          <div>
+            <dt>Profi MMA-mérleg</dt>
+            <dd>{{ record(profile.fighter) }}</dd>
+          </div>
+        </dl>
+      </div>
+    </article>
+
+    <h2>Az oldalon rögzített mérkőzések</h2>
+
+    <p class="muted">
+      A bemutatópárosítások nem hivatalos nevezések. A lista nem teljes pályafutástörténet.
+    </p>
+
+    @if (profile.fights.length === 0) {
+      <p class="empty-state">Ehhez a harcoshoz még nincs rögzített mérkőzés.</p>
+    } @else {
+      <div class="sports-list">
+        @for (fight of profile.fights; track fight.id) {
+          <article class="card">
+            <h3>
+              @if (fight.redCorner; as fighter) {
+                <a [routerLink]="['/harcosok', fighter.id]">
+                  {{ fighter.name }}
+                </a>
+              } @else {
+                Ismeretlen harcos
+              }
+
+              –
+
+              @if (fight.blueCorner; as fighter) {
+                <a [routerLink]="['/harcosok', fighter.id]">
+                  {{ fighter.name }}
+                </a>
+              } @else {
+                Ismeretlen harcos
+              }
+            </h3>
+
+            @if (fight.event; as event) {
+              <p>
+                <a [routerLink]="['/esemenyek', event.id]">
+                  {{ event.name }}
+                </a>
+                · {{ event.date | date: 'yyyy. MM. dd.' }}
+              </p>
+            } @else {
+              <p class="muted">Az esemény adatai nem elérhetők.</p>
+            }
+
+            <p>{{ fight.weightClass }} · {{ fight.scheduledRounds }} tervezett menet</p>
+
+            @if (fight.isTitleFight) {
+              <span class="sports-badge"> Bajnoki mérkőzés </span>
+            }
+
+            <div class="actions">
+              <a class="button secondary" [routerLink]="['/meccsek', fight.id]">
+                Mérkőzés adatlapja
+              </a>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+</section>

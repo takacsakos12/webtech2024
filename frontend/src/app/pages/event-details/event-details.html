@@ -12,32 +12,61 @@
       <button type="button" (click)="loadEvent()">Újrapróbálás</button>
     </div>
   } @else if (event(); as currentEvent) {
-    <article class="details-card">
-      <p class="organization">
-        {{ currentEvent.organization }}
-      </p>
+    <article class="event-overview">
+      <div class="event-date-stamp" aria-hidden="true">
+        <span>{{ currentEvent.date | date: 'yyyy' }}</span>
 
-      <h2>{{ currentEvent.name }}</h2>
+        <strong>
+          {{ currentEvent.date | date: 'dd' }}
+        </strong>
 
-      <dl>
-        <dt>Dátum</dt>
-        <dd>
-          <time [attr.datetime]="currentEvent.date">
-            {{ currentEvent.date | date: 'yyyy. MM. dd.' }}
-          </time>
-        </dd>
+        <span> {{ currentEvent.date | date: 'MM' }}. hónap </span>
+      </div>
 
-        <dt>Helyszín</dt>
-        <dd>{{ currentEvent.location }}</dd>
+      <div class="event-overview-title">
+        <p class="event-kicker">{{ currentEvent.organization }} · MMA esemény</p>
 
-        <dt>Szervezet</dt>
-        <dd>{{ currentEvent.organization }}</dd>
+        <h2>{{ currentEvent.name }}</h2>
+
+        <p class="event-overview-location">
+          {{ currentEvent.location }}
+        </p>
+
+        <a class="button event-jump" [href]="'esemenyek/' + currentEvent.id + '#fights-heading'">
+          Párosítások megtekintése ↓
+        </a>
+      </div>
+
+      <dl class="event-overview-meta">
+        <div>
+          <dt>Időpont</dt>
+          <dd>
+            <time [attr.datetime]="currentEvent.date">
+              {{ currentEvent.date | date: 'yyyy. MM. dd.' }}
+            </time>
+          </dd>
+        </div>
+
+        <div>
+          <dt>Helyszín</dt>
+          <dd>{{ currentEvent.location }}</dd>
+        </div>
+
+        <div>
+          <dt>Szervezet</dt>
+          <dd>{{ currentEvent.organization }}</dd>
+        </div>
+
+        <div>
+          <dt>Párosítások</dt>
+          <dd>{{ currentEvent.fights.length }} mérkőzés</dd>
+        </div>
       </dl>
-
-      <p class="demo-note">
-        Bemutatóadatok, nem ellenőrzött versenynaptár vagy hivatalos nevezési lista.
-      </p>
     </article>
+
+    <p class="demo-note">
+      Bemutatóadatok, nem ellenőrzött versenynaptár vagy hivatalos nevezési lista.
+    </p>
 
     <section class="fights-section" aria-labelledby="fights-heading">
       <div class="fights-heading">
@@ -86,9 +115,10 @@
                     />
 
                     <p class="fighter-name">
-                      {{ fighter.name }}
+                      <a [routerLink]="['/harcosok', fighter.id]">
+                        {{ fighter.name }}
+                      </a>
                     </p>
-
                     @if (fighter.nickname) {
                       <p class="fighter-nickname">„{{ fighter.nickname }}”</p>
                     }
@@ -109,17 +139,24 @@
 
                 <div class="fighter blue-corner">
                   @if (fight.blueCorner; as fighter) {
-                    <img
-                      [src]="fighter.image || '/images/fighters/placeholder.svg'"
-                      alt=""
-                      width="100"
-                      height="100"
-                      loading="lazy"
-                      (error)="onImageError($event)"
-                    />
+                    <a
+                      [routerLink]="['/harcosok', fighter.id]"
+                      [attr.aria-label]="fighter.name + ' profilja'"
+                    >
+                      <img
+                        [src]="fighter.image || '/images/fighters/placeholder.svg'"
+                        alt=""
+                        width="100"
+                        height="100"
+                        loading="lazy"
+                        (error)="onImageError($event)"
+                      />
+                    </a>
 
                     <p class="fighter-name">
-                      {{ fighter.name }}
+                      <a [routerLink]="['/harcosok', fighter.id]">
+                        {{ fighter.name }}
+                      </a>
                     </p>
 
                     @if (fighter.nickname) {
@@ -141,7 +178,10 @@
 
               <footer class="fight-footer">
                 <span>{{ fight.weightClass }}</span>
+
                 <span> {{ fight.scheduledRounds }} tervezett menet </span>
+
+                <a [routerLink]="['/meccsek', fight.id]"> Mérkőzés adatlapja → </a>
               </footer>
 
               @if (fight.status === 'completed') {

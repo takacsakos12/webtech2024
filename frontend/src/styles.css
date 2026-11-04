@@ -410,3 +410,69 @@ tbody tr:hover {
     width: 100%;
   }
 }
+
+.sports-details .athlete-profile {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.sports-details .athlete-profile img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--dark);
+  object-fit: cover;
+}
+
+.sports-details .athlete-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sports-details dt {
+  font-weight: bold;
+}
+
+.sports-details dd {
+  margin: 4px 0 0;
+}
+
+.sports-details .sports-list {
+  display: grid;
+  gap: 16px;
+}
+
+.sports-details .sports-matchup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  padding: 24px 0;
+  text-align: center;
+}
+
+.sports-details .sports-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #fff8db;
+  color: #705000;
+  font-weight: bold;
+}
+
+.sports-details h2,
+.sports-details h3,
+.sports-details dd {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .sports-details .athlete-profile,
+  .sports-details .athlete-facts,
+  .sports-details .sports-matchup {
+    grid-template-columns: 1fr;
+  }
+}

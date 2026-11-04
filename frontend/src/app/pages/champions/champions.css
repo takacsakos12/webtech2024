@@ -1,34 +1,217 @@
-.champions-page {
-  max-width: 900px;
-  margin: 0 auto;
+.champions-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.champions-source {
+  display: grid;
+  gap: 6px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.champions-source > span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.champions-source a {
+  font-size: 0.9rem;
+}
+
+.champions-search {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.champions-search > div {
+  flex: 1;
+}
+
+.champions-count {
+  margin: 20px 0;
+}
+
+.champions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.champion-card {
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.champion-card-top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 3px solid var(--accent);
+  background: var(--dark);
+  color: white;
+}
+
+.champion-organization {
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.champion-initial {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #64748b;
+  border-radius: 50%;
+  background: #293342;
+  color: white;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.champion-division {
+  margin: 24px 24px 8px;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.champion-card h2 {
+  min-height: 2.5em;
+  margin: 0 24px 24px;
+  font-size: 1.3rem;
+  overflow-wrap: anywhere;
+}
+
+.champion-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.champion-mark {
+  color: #8a6100;
+}
+
+@media (max-width: 1100px) {
+  .champions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .champions-heading {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .champions-search {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .champions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.champion-card {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgb(21 27 36 / 6%);
+}
+
+.champion-photo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-bottom: 4px solid var(--accent);
+  background: radial-gradient(circle at top right, #475569, #151b24 75%);
+}
+
+.champion-photo img {
+  z-index: 1;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.champion-portrait-initial {
+  color: #cbd5e1;
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.champion-photo-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  padding: 6px 12px;
+  border: 1px solid #64748b;
+  border-radius: 6px;
+  background: #151b24;
+  color: var(--accent);
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.champion-card-body {
   padding: 24px;
 }
 
-.table-container {
-  overflow-x: auto;
+.champion-card-body .champion-division {
+  margin: 0 0 10px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.champion-card-body h2 {
+  min-height: 0;
+  margin: 0;
+  font-size: 1.4rem;
 }
 
-caption {
-  text-align: left;
-  padding-bottom: 12px;
+.champion-card-footer {
+  margin-top: auto;
 }
 
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+.champion-photo-credit {
+  margin: 0;
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
-th {
-  background-color: #ededed;
-}
-
-tbody tr:hover {
-  background-color: #f7f7f7;
+.champion-photo-credit span {
+  display: block;
 }
